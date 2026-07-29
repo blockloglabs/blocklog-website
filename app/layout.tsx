@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow, Geist, IBM_Plex_Sans } from "next/font/google";
+import { Inter, Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 
 import "./globals.css";
@@ -7,16 +7,22 @@ import "./globals.css";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 
-const barlow = Barlow({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-body",
+  variable: "--font-inter",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
@@ -24,33 +30,31 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://blocklogsecurity.com"),
 
   title: {
-    default:
-      "Blocklog — Replay Every AI Decision. Understand Every Failure.",
+    default: "Blocklog — AI Compliance Infrastructure for Regulated Enterprises",
     template: "%s | Blocklog",
   },
 
   description:
-    "The forensic replay platform for AI systems. Reconstruct decisions, identify root causes, analyze failures, and generate audit-ready evidence from every AI interaction.",
+    "Blocklog creates tamper-evident audit trails, cryptographic evidence packages, and regulator-ready exports for AI systems operating under Indian regulations. Built for banks, NBFCs, healthcare, and regulated enterprises.",
 
   keywords: [
-    "AI observability",
-    "AI debugging",
-    "AI compliance",
-    "LLM monitoring",
-    "AI audit logs",
-    "AI tracing",
-    "agent observability",
+    "AI compliance India",
+    "RBI AI governance",
+    "SEBI regulation 16C",
+    "DPDP Act compliance",
+    "AI audit trail",
+    "tamper-evident logs",
+    "cryptographic audit",
     "AI governance",
-    "AI replay",
+    "ISO 42001",
+    "AI evidence package",
+    "AI regulatory compliance",
     "Blocklog",
+    "compliance infrastructure",
+    "enterprise AI compliance",
   ],
 
-  authors: [
-    {
-      name: "Blocklog",
-    },
-  ],
-
+  authors: [{ name: "Blocklog" }],
   creator: "Blocklog",
   publisher: "Blocklog",
 
@@ -68,28 +72,27 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
     url: "https://blocklogsecurity.com",
     siteName: "Blocklog",
-    title: "Replay Every AI Decision. Understand Every Failure.",
+    title: "AI Compliance Infrastructure for Regulated Enterprises",
     description:
-      "The forensic replay platform for AI systems. Reconstruct decisions, identify root causes, analyze failures, and generate audit-ready evidence.",
-
+      "When RBI or SEBI asks for your AI decision trail, can you produce it within 24 hours? Blocklog makes it possible.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Blocklog",
+        alt: "Blocklog — AI Compliance Infrastructure",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Replay Every AI Decision. Understand Every Failure.",
+    title: "Blocklog — AI Compliance Infrastructure",
     description:
-      "The forensic replay platform for AI systems.",
+      "Tamper-evident audit trails and cryptographic evidence for AI systems under Indian regulations.",
     images: ["/og-image.png"],
   },
 
@@ -107,7 +110,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#000000",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({
@@ -116,33 +119,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      data-theme="dark"
-    >
+    <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Google Analytics */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"
         />
-
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-        >
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
-
-            function gtag() {
-              dataLayer.push(arguments);
-            }
-
+            function gtag() { dataLayer.push(arguments); }
             window.gtag = gtag;
-
             gtag('js', new Date());
-
             gtag('config', '${GA_MEASUREMENT_ID}', {
               send_page_view: false,
               anonymize_ip: true,
@@ -150,9 +138,8 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-
       <body
-        className={`${barlow.variable} ${geist.variable}`}
+        className={`${inter.variable} ${geist.variable} ${geistMono.variable}`}
       >
         <AnalyticsTracker />
         {children}

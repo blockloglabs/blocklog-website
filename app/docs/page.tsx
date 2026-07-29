@@ -1,99 +1,135 @@
-"use client";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowRight, BookOpen, Code, Terminal, FileText, Zap } from 'lucide-react';
 
-import Link from "next/link";
+export const metadata: Metadata = {
+  title: 'Documentation — Blocklog AI Infrastructure',
+  description: 'Technical documentation, SDK references, API specs, and compliance integration guides.',
+};
 
 const docGroups = [
   {
-    title: "Getting Started",
+    title: 'Getting Started',
     items: [
-      { eyebrow: "Quickstart", title: "5 Minutes to First Log", description: "Install the SDK, configure credentials, and send your first cryptographically anchored audit log.", href: "/docs/quickstart" },
-      { eyebrow: "Core Concepts", title: "Decisions, Cryptography & Accountability", description: "Understand the cryptographic foundations of tamper-evident logging and why Blocklog exists.", href: "/docs/concepts" },
+      {
+        eyebrow: 'Quickstart',
+        title: '5 Minutes to First Log',
+        description: 'Install the SDK, configure credentials, and send your first cryptographically anchored audit log.',
+        href: '/docs/quickstart',
+        icon: <Zap className="w-4 h-4 text-blue-600" />,
+      },
+      {
+        eyebrow: 'Core Concepts',
+        title: 'Decisions, Cryptography & Accountability',
+        description: 'Understand the cryptographic foundations of tamper-evident logging and why Blocklog exists.',
+        href: '/docs/concepts',
+        icon: <BookOpen className="w-4 h-4 text-blue-600" />,
+      },
     ],
   },
   {
-    title: "References",
+    title: 'SDK & API References',
     items: [
-      { eyebrow: "Python SDK", title: "Python SDK Reference", description: "Method signatures, parameter schemas, return types, and runnable examples for the Python client.", href: "/docs/python-sdk" },
-      { eyebrow: "REST API", title: "REST API Reference", description: "Ingest logs, verify integrity, manage incidents, and trigger human review via HTTPS.", href: "/docs/api-reference" },
-    ],
-  },
-  {
-    title: "Examples",
-    items: [
-      { eyebrow: "End-to-End Example", title: "AI Agent Incident Reconstruction", description: "Walkthrough of a multi-agent workflow where a risk limit violation triggers forensic replay.", href: "/docs/incident-reconstruction" },
+      {
+        eyebrow: 'Python SDK',
+        title: 'Python SDK Reference',
+        description: 'Method signatures, parameter schemas, return types, and runnable examples for the Python client.',
+        href: '/docs/python-sdk',
+        icon: <Terminal className="w-4 h-4 text-blue-600" />,
+      },
+      {
+        eyebrow: 'TypeScript SDK',
+        title: 'TypeScript / Node.js Reference',
+        description: 'Full TypeScript typings, async tracing, and integration patterns for Web and Node runtime environments.',
+        href: '/docs/ts-sdk',
+        icon: <Code className="w-4 h-4 text-blue-600" />,
+      },
+      {
+        eyebrow: 'REST API',
+        title: 'REST API Reference',
+        description: 'Ingest logs, verify integrity, manage incidents, and trigger human review via HTTPS API.',
+        href: '/docs/api-reference',
+        icon: <FileText className="w-4 h-4 text-blue-600" />,
+      },
     ],
   },
 ];
 
 export default function DocsIndexPage() {
   return (
-    <main style={{ padding: "48px 48px 80px", maxWidth: 920, width: "100%", position: "relative", zIndex: 1 }}>
-      <div className="space-y-8">
-        <section style={{ marginBottom: 32 }}>
-          <p className="eyebrow">Documentation</p>
-          <h1 style={{ fontSize: "2rem", fontWeight: 700, letterSpacing: "-0.025em", margin: "10px 0 14px" }}>
-            Blocklog Docs
-          </h1>
-          <p style={{ fontSize: "1rem", color: "var(--muted)", lineHeight: 1.75, maxWidth: 680, margin: 0 }}>
-            Tamper-evident audit logging and AI forensic infrastructure. Start with the quickstart, then move into concepts, SDK usage, and API workflows.
-          </p>
-        </section>
-
-        <Link href="/docs/quickstart" style={{ textDecoration: "none", display: "block" }}>
-          <section style={{ border: "1px solid rgba(var(--accent-rgb), 0.22)", background: "rgba(var(--accent-rgb), 0.06)", borderRadius: 14, padding: "22px 24px", marginBottom: 36 }}>
-            <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
-              Start Here
-            </p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-              <div>
-                <h2 style={{ fontSize: "1.05rem", fontWeight: 600, margin: "0 0 6px", color: "var(--foreground)" }}>
-                  Quickstart — 5 Minutes to First Log
-                </h2>
-                <p style={{ margin: 0, color: "var(--muted)", fontSize: "0.93rem", lineHeight: 1.7 }}>
-                  Set up credentials, install the SDK, and anchor your first audit event.
-                </p>
-              </div>
-              <span style={{ color: "var(--accent)", fontSize: "1.15rem" }}>→</span>
-            </div>
-          </section>
-        </Link>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
-          {docGroups.map((group) => (
-            <section key={group.title}>
-              <h2 style={{ fontSize: "1.05rem", fontWeight: 600, margin: "0 0 14px", letterSpacing: "-0.01em" }}>
-                {group.title}
-              </h2>
-              <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, overflow: "hidden", background: "rgba(255,255,255,0.02)" }}>
-                {group.items.map((doc, index) => (
-                  <Link
-                    key={doc.href}
-                    href={doc.href}
-                    style={{ display: "block", textDecoration: "none", color: "inherit", padding: "18px 20px", borderTop: index === 0 ? "none" : "1px solid rgba(255,255,255,0.06)", transition: "background 0.15s ease" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-                  >
-                    <p style={{ fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>
-                      {doc.eyebrow}
-                    </p>
-                    <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between", gap: 16 }}>
-                      <div>
-                        <h3 style={{ margin: "0 0 6px", fontSize: "0.98rem", fontWeight: 600, color: "var(--foreground)" }}>
-                          {doc.title}
-                        </h3>
-                        <p style={{ margin: 0, fontSize: "0.92rem", lineHeight: 1.7, color: "var(--muted)", maxWidth: 620 }}>
-                          {doc.description}
-                        </p>
-                      </div>
-                      <span style={{ color: "var(--muted)", fontSize: "1rem", flexShrink: 0, marginTop: 2 }}>→</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
+    <div className="max-w-4xl">
+      <div className="mb-10">
+        <span className="eyebrow mb-2">Developer &amp; Compliance Hub</span>
+        <h1
+          className="text-[2.25rem] font-bold text-slate-900 tracking-tight mb-3"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Blocklog Documentation
+        </h1>
+        <p className="text-[1.0625rem] text-slate-600 leading-relaxed">
+          Tamper-evident audit logging and AI forensic infrastructure. Start with the quickstart, then explore SDK references, API specs, and compliance workflows.
+        </p>
       </div>
-    </main>
+
+      {/* Featured Quickstart Box */}
+      <Link href="/docs/quickstart" className="block group mb-10">
+        <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 hover:border-blue-300 transition-all shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-white/80 px-2.5 py-0.5 rounded-full border border-blue-200 inline-block mb-2">
+                Recommended Start
+              </span>
+              <h2 className="text-[1.15rem] font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">
+                Quickstart — 5 Minutes to First Log
+              </h2>
+              <p className="text-[13.5px] text-slate-600">
+                Set up credentials, install `@blocklog/sdk`, and anchor your first AI decision event.
+              </p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      </Link>
+
+      {/* Groups */}
+      <div className="space-y-10">
+        {docGroups.map((group) => (
+          <div key={group.title}>
+            <h2
+              className="text-[1.1rem] font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              {group.title}
+            </h2>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              {group.items.map((item) => (
+                <Link key={item.href} href={item.href} className="group block">
+                  <div className="p-5 rounded-xl border border-slate-200 bg-white hover:border-blue-200 hover:shadow-md transition-all h-full flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        {item.icon}
+                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                          {item.eyebrow}
+                        </span>
+                      </div>
+                      <h3 className="text-[14.5px] font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-[13px] text-slate-500 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                    <div className="mt-4 flex items-center text-[12.5px] font-semibold text-blue-600 group-hover:gap-1.5 transition-all">
+                      Read Docs <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

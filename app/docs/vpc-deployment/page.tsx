@@ -612,12 +612,12 @@ export default function SelfHostingDocsPage() {
             </a>{" "}
             or open an issue at{" "}
             <a
-              href="https://github.com/soumyasurana/blocklog-dashboard"
+              href="https://github.com/blockloglabs/blocklog-dashboard"
               target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-200 underline underline-offset-2 hover:text-white"
             >
-              github.com/soumyasurana/blocklog-dashboard
+              github.com/blockloglabs/blocklog-dashboard
             </a>
             .
           </p>
