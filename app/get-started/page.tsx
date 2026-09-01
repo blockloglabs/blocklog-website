@@ -76,7 +76,7 @@ export default function GetStartedPage() {
               </div>
 
               <Link
-                href="https://app.blocklogsecurity.com/register"
+                href="https://app.blocklogsecurity.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[14.5px] flex items-center justify-center gap-2 shadow-sm transition-all"
