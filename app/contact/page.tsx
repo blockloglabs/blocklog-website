@@ -105,7 +105,7 @@ export default function ContactPage() {
               </div>
 
               <Link
-                href="https://cal.com/blocklog/compliance-call"
+                href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[14px] flex items-center justify-center gap-2 transition-colors"

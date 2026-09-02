@@ -77,7 +77,7 @@ export function Navbar() {
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
           <Link
-            href="https://cal.com/blocklog/compliance-call"
+            href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex min-w-[108px] items-center justify-center px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-[13.5px] font-semibold rounded-lg transition-colors shadow-sm"
@@ -130,7 +130,7 @@ export function Navbar() {
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="https://cal.com/blocklog/compliance-call"
+                  href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-3 bg-slate-900 text-white text-[14px] font-medium rounded-lg text-center"

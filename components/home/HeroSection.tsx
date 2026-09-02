@@ -119,7 +119,7 @@ export function HeroSection() {
                 </svg>
               </Link>
               <Link
-                href="https://cal.com/blocklog/compliance-call"
+                href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-12 items-center justify-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-[14.5px] font-semibold rounded-xl transition-all shadow-sm hover:shadow-md hover:-translate-y-px"

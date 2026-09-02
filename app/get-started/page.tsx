@@ -131,12 +131,12 @@ export default function GetStartedPage() {
               </div>
 
               <Link
-                href="https://cal.com/blocklog/compliance-call"
+                href="get-started/vpc"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[14.5px] flex items-center justify-center gap-2 transition-all"
               >
-                Schedule VPC Consultation
+                Request VPC Deployment
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

@@ -76,7 +76,7 @@ const plans = [
     period: 'starting at $1,500/mo',
     description: 'For banks, NBFCs, healthcare systems, and government bodies requiring VPC or on-prem deployment.',
     cta: 'Book Enterprise Call',
-    ctaHref: 'https://cal.com/blocklog/compliance-call',
+    ctaHref: 'https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min',
     ctaVariant: 'dark',
     external: true,
     features: [

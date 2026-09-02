@@ -152,7 +152,7 @@ export function FinalCTASection() {
               </svg>
             </Link>
             <Link
-              href="https://cal.com/blocklog/compliance-call"
+              href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-white/10 hover:bg-white/15 text-white text-[15px] font-semibold rounded-xl border border-white/15 hover:border-white/30 transition-all hover:-translate-y-px"

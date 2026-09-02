@@ -100,7 +100,7 @@ export default function PilotPage() {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href="https://cal.com/blocklog/compliance-call"
+                href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[14.5px] rounded-xl shadow-sm transition-all"
@@ -254,7 +254,7 @@ export default function PilotPage() {
                 Schedule a 20-minute kickoff call with our compliance engineering team.
               </p>
               <Link
-                href="https://cal.com/blocklog/compliance-call"
+                href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[14.5px] rounded-xl transition-all shadow-md"

@@ -88,7 +88,7 @@ export default function SecurityPage() {
                 Request Security Docs
               </Link>
               <Link
-                href="https://cal.com/blocklog/compliance-call"
+                href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold text-[14px] rounded-xl transition-all"
