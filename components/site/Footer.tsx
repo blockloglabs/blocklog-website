@@ -10,8 +10,8 @@ const footerSections = [
       { label: 'Evidence Packages', href: '#evidence' },
       { label: 'Hash Verification', href: '#verification' },
       { label: 'Audit Timelines', href: '#architecture' },
-      { label: 'Compliance Reports', href: '#regulations' },
       { label: 'Pricing', href: '/pricing' },
+      { label: 'Pilot', href: '/pilot' },
     ],
   },
   {
