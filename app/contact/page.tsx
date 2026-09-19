@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
-import { Mail, Clock, ShieldCheck, MapPin, ArrowRight } from 'lucide-react';
+import { Mail, Clock, ShieldCheck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export default function ContactPage() {
             >
               Speak with our compliance team.
             </h1>
-            <p className="text-[1.0625rem] text-slate-600 max-w-xl mx-auto">
+            <p className="section-subheading text-center">
               Have questions about DPDP Act, RBI AI/ML guidelines, VPC deployment, or security architecture? Our engineers are here to assist.
             </p>
           </div>

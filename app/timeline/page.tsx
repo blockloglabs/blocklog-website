@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
-import { Shield, Cpu, Lock, CheckCircle2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -82,7 +82,7 @@ export default function TimelinePage() {
             >
               The Four Layers of AI Governance.
             </h1>
-            <p className="text-[1.0625rem] text-slate-600 max-w-2xl mx-auto">
+            <p className="section-subheading text-center">
               From low-overhead telemetry ingestion to immutable cryptographic proof, Blocklog provides a multi-layer defense against AI audit risks.
             </p>
           </div>

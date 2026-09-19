@@ -246,6 +246,20 @@ ul, ol { list-style: none; margin: 0; padding: 0; }
   color: var(--accent);
 }
 
+/*
+ * Section / page subheading
+ *
+ * Base: font size, line-height, colour, and smart text wrapping.
+ * Centred usage: add "text-center max-w-2xl mx-auto" via Tailwind at the call site.
+ * Left-aligned usage: use as-is; parent supplies text-align if needed.
+ */
+.section-subheading {
+  font-size: 1.0625rem;   /* ~17px — consistent with page-level subheadings */
+  line-height: 1.75;      /* leading-relaxed */
+  color: #475569;         /* slate-600 */
+  text-wrap: pretty;  /* no orphaned words across reflows */ 
+}
+
 /* Separator */
 .separator {
   height: 1px;

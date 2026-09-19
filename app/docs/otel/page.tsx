@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { CodeTerminal } from "@/components/ui/CodeTerminal";
+import { Activity, ArrowRight, Gauge, Layers, Radio, HelpCircle, CheckCircle2 } from "lucide-react";
 
 // Code samples
-
 const envConfig = `OTEL_ENABLED=true
 OTEL_EXPORTER_OTLP_ENDPOINT=http://your-collector:4317`;
 
@@ -70,23 +71,6 @@ service:
       receivers: [otlp]
       exporters: [otlp/jaeger]`;
 
-// Sub-components
-
-function CodeBlock({ code, filename }: { code: string; filename?: string }) {
-  return (
-    <div className="overflow-hidden rounded-xl border border-white/10">
-      {filename && (
-        <div className="border-b border-white/10 bg-white/[0.04] px-4 py-2">
-          <span className="font-mono text-[11px] text-zinc-500">{filename}</span>
-        </div>
-      )}
-      <pre className="overflow-x-auto bg-black/30 p-4 text-sm leading-6 text-zinc-200 sm:p-5">
-        <code>{code}</code>
-      </pre>
-    </div>
-  );
-}
-
 function StepCard({
   step,
   title,
@@ -99,318 +83,277 @@ function StepCard({
   children: React.ReactNode;
 }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-        {step}
-      </p>
-      <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">{title}</h2>
-      <p className="mt-2 text-sm leading-7 text-muted sm:text-[15px]">{description}</p>
-      <div className="mt-4">{children}</div>
+    <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+      <div>
+        <span
+          className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
+          {step}
+        </span>
+        <h2
+          className="text-lg font-bold text-slate-900"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {title}
+        </h2>
+        <p className="mt-1 text-sm text-slate-600 leading-relaxed">{description}</p>
+      </div>
+      <div>{children}</div>
     </article>
   );
 }
 
-function SignalBadge({ label, color }: { label: string; color: string }) {
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em]"
-      style={{ borderColor: `${color}40`, color, backgroundColor: `${color}12` }}
-    >
-      <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
-      {label}
-    </span>
-  );
-}
-
-function InlineCode({ children }: { children: React.ReactNode }) {
-  return (
-    <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-[13px] text-zinc-200">
-      {children}
-    </code>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-      {children}
-    </p>
-  );
-}
-
-function Callout({
-  type = "info",
-  children,
-}: {
-  type?: "info" | "warning";
-  children: React.ReactNode;
-}) {
-  const styles =
-    type === "warning"
-      ? { border: "#f59e0b40", bg: "#f59e0b08", icon: "⚠" }
-      : { border: "#818cf840", bg: "#818cf808", icon: "ℹ" };
-
-  return (
-    <div
-      className="mt-4 flex gap-3 rounded-xl border p-4 text-sm leading-7 text-muted"
-      style={{ borderColor: styles.border, backgroundColor: styles.bg }}
-    >
-      <span className="mt-0.5 shrink-0 text-base leading-6">{styles.icon}</span>
-      <div>{children}</div>
-    </div>
-  );
-}
-
-// Telemetry that ships
-
 const signals = [
   {
+    icon: <Activity className="h-4 w-4 text-indigo-600" />,
     label: "Traces",
-    color: "#818cf8",
-    description: "Every API request, database query, cache operation, and background job — linked across services into full end-to-end traces.",
+    badge: "text-indigo-700 bg-indigo-50 border-indigo-200",
+    description: "Every API request, database transaction, cryptographic hash verification, and background worker job — linked into end-to-end distributed traces.",
   },
   {
+    icon: <Gauge className="h-4 w-4 text-emerald-600" />,
     label: "Metrics",
-    color: "#34d399",
-    description: "Request rates, error rates, latency histograms, and log ingestion counts — exported on a 60-second interval by default.",
+    badge: "text-emerald-700 bg-emerald-50 border-emerald-200",
+    description: "Ingestion throughput, verification latencies, proof validation rates, and Celery queue depths — exported periodically via OTLP metrics.",
   },
   {
+    icon: <Layers className="h-4 w-4 text-amber-600" />,
     label: "Logs",
-    color: "#fb923c",
-    description: "Structured application logs with trace_id and span_id injected automatically, so every log line links back to a trace.",
+    badge: "text-amber-700 bg-amber-50 border-amber-200",
+    description: "Structured JSON logs with trace_id and span_id automatically injected, connecting raw server diagnostics to high-level agent decisions.",
   },
 ];
 
 const signalTable = [
-  { signal: "Traces", exporter: "OTLPSpanExporter", processor: "BatchSpanProcessor", interval: "On flush / 5 s max", color: "#818cf8" },
-  { signal: "Metrics", exporter: "OTLPMetricExporter", processor: "PeriodicExportingMetricReader", interval: "60 s (configurable)", color: "#34d399" },
-  { signal: "Logs", exporter: "OTLPLogExporter", processor: "BatchLogRecordProcessor", interval: "On flush / 5 s max", color: "#fb923c" },
+  { signal: "Traces", exporter: "OTLPSpanExporter", processor: "BatchSpanProcessor", interval: "On flush / 5 s max", color: "text-indigo-700" },
+  { signal: "Metrics", exporter: "OTLPMetricExporter", processor: "PeriodicExportingMetricReader", interval: "60 s (configurable)", color: "text-emerald-700" },
+  { signal: "Logs", exporter: "OTLPLogExporter", processor: "BatchLogRecordProcessor", interval: "On flush / 5 s max", color: "text-amber-700" },
 ];
-
-// Page 
 
 export default function OtelDocsPage() {
   return (
-    <main
-      className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
-      style={{ position: "relative", zIndex: 1 }}
-    >
-      <div className="space-y-10">
+    <div className="max-w-4xl space-y-12">
+      {/* Header */}
+      <header>
+        <span className="eyebrow mb-2">Observability</span>
+        <h1
+          className="text-[2.25rem] font-bold text-slate-900 tracking-tight mb-3"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Export Telemetry via OpenTelemetry
+        </h1>
+        <p className="section-subheading max-w-2xl">
+          Stream traces, metrics, and application logs directly to Datadog, Grafana Cloud, Honeycomb, New Relic, or internal OTel collectors with zero code modifications.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {signals.map((s) => (
+            <span
+              key={s.label}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider ${s.badge}`}
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {s.icon}
+              {s.label}
+            </span>
+          ))}
+        </div>
+      </header>
 
-        {/* Header */}
-        <header className="max-w-3xl">
-          <p className="eyebrow">Observability</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Export Telemetry via OpenTelemetry
-          </h1>
-          <p className="mt-4 text-base leading-8 text-muted">
-            Blocklog can push traces, metrics, and logs to any OpenTelemetry-compatible
-            backend — Grafana, Jaeger, Datadog, Honeycomb, or your own collector.
-            Two environment variables are all it takes to enable it.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            <SignalBadge label="Traces" color="#818cf8" />
-            <SignalBadge label="Metrics" color="#34d399" />
-            <SignalBadge label="Logs" color="#fb923c" />
-          </div>
-        </header>
-
-        {/* What ships */}
-        <section className="space-y-3">
-          <SectionLabel>What Blocklog exports</SectionLabel>
-          <div className="grid gap-4 sm:grid-cols-3">
-            {signals.map(({ label, color, description }) => (
-              <div
-                key={label}
-                className="rounded-2xl border bg-white/[0.02] p-5"
-                style={{ borderColor: `${color}30` }}
+      {/* What ships */}
+      <section className="space-y-4">
+        <h2
+          className="text-lg font-bold text-slate-900"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Supported Telemetry Signals
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {signals.map(({ label, icon, badge, description }) => (
+            <div key={label} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${badge}`}
+                style={{ fontFamily: "var(--font-mono)" }}
               >
-                <SignalBadge label={label} color={color} />
-                <p className="mt-3 text-sm leading-7 text-muted">{description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+                {icon}
+                {label}
+              </span>
+              <p className="text-xs text-slate-600 leading-relaxed">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        {/* Step 1 – Enable */}
-        <StepCard
-          step="Step 1"
-          title="Enable OTel with two variables"
-          description="Set these in your environment, .env file, or deployment config. Everything else has a working default."
+      {/* Step 1 – Enable */}
+      <StepCard
+        step="Step 01"
+        title="Enable OTel with Environment Variables"
+        description="Set these two variables in your deployment environment or .env file. All other exporter options have production-safe defaults."
+      >
+        <CodeTerminal code={envConfig} language="bash" title=".env" />
+        <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50/50 p-4 text-xs text-slate-700 leading-relaxed">
+          <strong>Network note:</strong> Ensure the collector endpoint is reachable from the Blocklog container. Use an internal DNS name or host IP rather than <code className="font-mono bg-blue-100/70 px-1 py-0.5 rounded">localhost</code> when running in Docker.
+        </div>
+      </StepCard>
+
+      {/* Step 2 – Docker Compose */}
+      <StepCard
+        step="Step 02"
+        title="Inject Variables into Compose / ECS"
+        description="Pass the collector target and service name to your Blocklog container definition."
+      >
+        <CodeTerminal code={dockerCompose} language="yaml" title="docker-compose.yml" />
+      </StepCard>
+
+      {/* Step 3 – Collector config */}
+      <StepCard
+        step="Step 03"
+        title="Configure the OTel Collector Pipeline"
+        description="Blocklog transmits data using standard OTLP over gRPC (port 4317) or HTTP (port 4318). Below is a production collector pipeline routing to Jaeger and Prometheus."
+      >
+        <CodeTerminal code={collectorYaml} language="yaml" title="otel-collector-config.yaml" />
+      </StepCard>
+
+      {/* Grafana Agent */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+        <div className="flex items-center gap-2">
+          <Radio className="h-4 w-4 text-blue-600" />
+          <h2
+            className="text-base font-bold text-slate-900"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Alternative: Grafana Agent (Alloy / River Syntax)
+          </h2>
+        </div>
+        <p className="text-xs text-slate-600 leading-relaxed">
+          If your observability stack uses Grafana Cloud or self-hosted Tempo and Loki, configure Grafana Agent to receive OTLP signals natively:
+        </p>
+        <CodeTerminal code={grafanaAgentConfig} language="text" title="grafana-agent.alloy" />
+      </section>
+
+      {/* Full variable reference */}
+      <section className="space-y-4">
+        <h2
+          className="text-lg font-bold text-slate-900"
+          style={{ fontFamily: "var(--font-display)" }}
         >
-          <CodeBlock code={envConfig} filename=".env" />
-          <Callout>
-            Your collector must be reachable from the Blocklog process. Use a hostname
-            or IP that resolves inside your network — <InlineCode>localhost</InlineCode>{" "}
-            won't work inside Docker unless you set <InlineCode>network_mode: host</InlineCode>.
-          </Callout>
-        </StepCard>
-
-        {/* Step 2 – Docker Compose */}
-        <StepCard
-          step="Step 2"
-          title="Pass variables to your deployment"
-          description="If you run Blocklog via Docker Compose, add the variables to your service definition."
-        >
-          <CodeBlock code={dockerCompose} filename="docker-compose.yml" />
-        </StepCard>
-
-        {/* Step 3 – Collector config */}
-        <StepCard
-          step="Step 3"
-          title="Configure your collector"
-          description="Blocklog sends data over OTLP. Your collector needs an OTLP receiver on port 4317 (gRPC) or 4318 (HTTP). Below is a minimal OpenTelemetry Collector config that forwards everything to Jaeger."
-        >
-          <CodeBlock code={collectorYaml} filename="otel-collector-config.yaml" />
-          <p className="mt-3 text-xs leading-6 text-muted">
-            Replace the <InlineCode>exporters</InlineCode> block with your backend.
-            The OTel Collector supports Datadog, Honeycomb, Prometheus, Loki, and
-            dozens more out of the box.
-          </p>
-        </StepCard>
-
-        {/* Grafana alternative */}
-        <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-          <SectionLabel>Using Grafana Agent?</SectionLabel>
-          <p className="mb-4 text-sm leading-7 text-muted sm:text-[15px]">
-            If your stack is Grafana Cloud or a self-hosted Grafana + Tempo + Loki setup,
-            point Blocklog at your Grafana Agent instead. The agent accepts OTLP natively
-            and routes signals to the right backend automatically.
-          </p>
-          <CodeBlock code={grafanaAgentConfig} filename="grafana-agent.yaml" />
-        </section>
-
-        {/* Full variable reference */}
-        <section className="space-y-4">
-          <SectionLabel>All configuration variables</SectionLabel>
-          <CodeBlock code={envFull} filename=".env" />
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <table className="w-full text-sm text-muted">
-              <thead>
-                <tr className="border-b border-white/10 bg-white/[0.03] text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
-                  <th className="px-4 py-3">Variable</th>
-                  <th className="px-4 py-3">Default</th>
-                  <th className="px-4 py-3">Description</th>
+          Environment Configuration Reference
+        </h2>
+        <CodeTerminal code={envFull} language="bash" title=".env.complete" />
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-600" style={{ fontFamily: "var(--font-mono)" }}>
+                <th className="px-5 py-3">Variable</th>
+                <th className="px-5 py-3">Default</th>
+                <th className="px-5 py-3">Description</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {[
+                { key: "OTEL_ENABLED", default: "false", desc: "Enables trace, metric, and log export pipelines." },
+                { key: "OTEL_EXPORTER_OTLP_ENDPOINT", default: "http://localhost:4317", desc: "Collector destination URL (gRPC: 4317, HTTP: 4318)." },
+                { key: "OTEL_SERVICE_NAME", default: "blocklog", desc: "Service name tag emitted with all telemetry records." },
+                { key: "OTEL_EXPORTER_PROTOCOL", default: "grpc", desc: "Wire protocol: 'grpc' or 'http'." },
+                { key: "OTEL_EXPORTER_OTLP_HEADERS", default: "—", desc: "Optional header string (e.g. 'Authorization=Bearer <token>')." },
+                { key: "OTEL_TRACES_SAMPLE_RATE", default: "1.0", desc: "Trace sampling ratio (1.0 = 100%, 0.1 = 10%)." },
+                { key: "OTEL_METRICS_EXPORT_INTERVAL_MS", default: "60000", desc: "Metrics push cadence in milliseconds." },
+              ].map(({ key, default: def, desc }) => (
+                <tr key={key} className="hover:bg-slate-50/60 transition-colors">
+                  <td className="px-5 py-3.5 font-mono text-xs font-bold text-blue-700">{key}</td>
+                  <td className="px-5 py-3.5 font-mono text-xs text-slate-500">{def}</td>
+                  <td className="px-5 py-3.5 text-xs text-slate-600 leading-relaxed">{desc}</td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.06]">
-                {[
-                  { key: "OTEL_ENABLED", default: "false", desc: "Set to true to enable all three signal pipelines." },
-                  { key: "OTEL_EXPORTER_OTLP_ENDPOINT", default: "http://localhost:4317", desc: "OTLP collector endpoint. Use port 4317 for gRPC, 4318 for HTTP." },
-                  { key: "OTEL_SERVICE_NAME", default: "blocklog", desc: "Service name that appears in your tracing backend." },
-                  { key: "OTEL_EXPORTER_PROTOCOL", default: "grpc", desc: "Transport protocol — grpc or http." },
-                  { key: "OTEL_EXPORTER_OTLP_HEADERS", default: "—", desc: 'Comma-separated auth headers. e.g. "Authorization=Bearer token".' },
-                  { key: "OTEL_TRACES_SAMPLE_RATE", default: "1.0", desc: "Fraction of traces to record. 0.2 = 20 %, 1.0 = all." },
-                  { key: "OTEL_METRICS_EXPORT_INTERVAL_MS", default: "60000", desc: "How often metrics are pushed to the collector, in milliseconds." },
-                ].map(({ key, default: def, desc }) => (
-                  <tr key={key} className="bg-transparent transition-colors hover:bg-white/[0.02]">
-                    <td className="px-4 py-3 align-top">
-                      <InlineCode>{key}</InlineCode>
-                    </td>
-                    <td className="px-4 py-3 align-top font-mono text-xs text-zinc-500">{def}</td>
-                    <td className="px-4 py-3 align-top text-xs leading-6">{desc}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-        {/* Signal pipeline reference */}
-        <section className="space-y-4">
-          <SectionLabel>Signal pipeline reference</SectionLabel>
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <table className="w-full text-sm text-muted">
-              <thead>
-                <tr className="border-b border-white/10 bg-white/[0.03] text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-500">
-                  <th className="px-4 py-3">Signal</th>
-                  <th className="px-4 py-3">Exporter</th>
-                  <th className="px-4 py-3">Batching</th>
-                  <th className="px-4 py-3">Default cadence</th>
+      {/* Signal pipeline reference */}
+      <section className="space-y-4">
+        <h2
+          className="text-lg font-bold text-slate-900"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          Signal Pipeline Reference
+        </h2>
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <table className="w-full text-sm text-left">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-600" style={{ fontFamily: "var(--font-mono)" }}>
+                <th className="px-5 py-3">Signal</th>
+                <th className="px-5 py-3">Exporter Type</th>
+                <th className="px-5 py-3">Batch Processor</th>
+                <th className="px-5 py-3">Default Cadence</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {signalTable.map(({ signal, exporter, processor, interval, color }) => (
+                <tr key={signal} className="hover:bg-slate-50/60 transition-colors">
+                  <td className={`px-5 py-3.5 font-bold text-xs ${color}`}>{signal}</td>
+                  <td className="px-5 py-3.5 font-mono text-xs text-slate-700">{exporter}</td>
+                  <td className="px-5 py-3.5 font-mono text-xs text-slate-700">{processor}</td>
+                  <td className="px-5 py-3.5 text-xs text-slate-500">{interval}</td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-white/[0.06]">
-                {signalTable.map(({ signal, exporter, processor, interval, color }) => (
-                  <tr key={signal} className="bg-transparent transition-colors hover:bg-white/[0.02]">
-                    <td className="px-4 py-3 font-medium" style={{ color }}>{signal}</td>
-                    <td className="px-4 py-3"><InlineCode>{exporter}</InlineCode></td>
-                    <td className="px-4 py-3"><InlineCode>{processor}</InlineCode></td>
-                    <td className="px-4 py-3 text-xs">{interval}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-        {/* Troubleshooting */}
-        <section className="space-y-3">
-          <SectionLabel>Troubleshooting</SectionLabel>
-          <div className="space-y-3">
-            {[
-              {
-                q: "No data appearing in my backend",
-                a: (
-                  <>
-                    Confirm <InlineCode>OTEL_ENABLED=true</InlineCode> is set and
-                    that Blocklog's logs show no connection errors on startup. Check
-                    that your collector is reachable at the configured endpoint and
-                    that the protocol (gRPC vs HTTP) matches the collector's listener.
-                  </>
-                ),
-              },
-              {
-                q: "Traces arrive but metrics or logs are missing",
-                a: (
-                  <>
-                    Make sure your collector config has separate pipeline entries for{" "}
-                    <InlineCode>metrics</InlineCode> and <InlineCode>logs</InlineCode>.
-                    The OpenTelemetry Collector does not route signals automatically —
-                    each must be declared explicitly in the <InlineCode>service.pipelines</InlineCode> block.
-                  </>
-                ),
-              },
-              {
-                q: "Too much data / high cardinality",
-                a: (
-                  <>
-                    Lower <InlineCode>OTEL_TRACES_SAMPLE_RATE</InlineCode> to reduce
-                    trace volume (e.g. <InlineCode>0.1</InlineCode> for 10%). Health
-                    and metrics endpoints are excluded from tracing by default.
-                  </>
-                ),
-              },
-            ].map(({ q, a }) => (
-              <div key={q} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-                <p className="text-sm font-medium text-zinc-200">{q}</p>
-                <p className="mt-2 text-sm leading-7 text-muted">{a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+      {/* Troubleshooting */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <HelpCircle className="h-4 w-4 text-amber-600" />
+          <h2
+            className="text-lg font-bold text-slate-900"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Troubleshooting Telemetry Streams
+          </h2>
+        </div>
+        <div className="space-y-3">
+          {[
+            {
+              q: "No telemetry records appearing in your backend",
+              a: "Confirm OTEL_ENABLED=true is set and check container logs for connection refusal errors. Verify firewall rules allow outbound traffic to the specified collector port.",
+            },
+            {
+              q: "Traces arrive but metrics or logs are absent",
+              a: "Ensure your OpenTelemetry Collector configuration explicitly enables separate pipeline receivers for metrics and logs under service.pipelines.",
+            },
+            {
+              q: "High data volume and ingestion costs",
+              a: "Adjust OTEL_TRACES_SAMPLE_RATE to 0.1 (10% sampling) or 0.05 (5% sampling). Health check probes and internal pings are excluded from tracing by default.",
+            },
+          ].map(({ q, a }) => (
+            <div key={q} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-1.5">
+              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                {q}
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed pl-6">{a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        {/* Nav */}
-        <nav className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row">
-          <Link
-            className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-            href="/docs/quickstart"
-          >
-            Quickstart
-          </Link>
-          <Link
-            className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
-            href="/docs/python-sdk"
-          >
-            Python SDK Reference
-          </Link>
-          <Link
-            className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
-            href="/docs/concepts"
-          >
-            Core Concepts
-          </Link>
-        </nav>
-      </div>
-    </main>
+      {/* Nav */}
+      <nav className="flex flex-col gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-between items-center">
+        <Link
+          href="/docs/vpc-deployment"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors"
+        >
+          ← VPC Deployment
+        </Link>
+        <Link
+          href="/docs/api-reference"
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
+        >
+          REST API Reference <ArrowRight className="h-4 w-4" />
+        </Link>
+      </nav>
+    </div>
   );
 }

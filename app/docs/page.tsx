@@ -66,7 +66,7 @@ export default function DocsIndexPage() {
         >
           Blocklog Documentation
         </h1>
-        <p className="text-[1.0625rem] text-slate-600 leading-relaxed">
+        <p className="section-subheading max-w-2xl">
           Tamper-evident audit logging and AI forensic infrastructure. Start with the quickstart, then explore SDK references, API specs, and compliance workflows.
         </p>
       </div>

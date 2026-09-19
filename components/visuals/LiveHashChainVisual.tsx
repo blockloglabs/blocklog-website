@@ -52,19 +52,21 @@ export function LiveHashChainVisual() {
   const addLiveBlock = () => {
     setIsInjecting(true);
     setTimeout(() => {
-      const lastBlock = blocks[blocks.length - 1];
-      const nextId = lastBlock.id + 1;
-      const randomHex = Math.random().toString(16).substring(2, 10) + Math.random().toString(16).substring(2, 10);
-      const newBlock: Block = {
-        id: nextId,
-        hash: randomHex + 'a0b1c2d3e4f5',
-        prevHash: lastBlock.hash.substring(0, 32),
-        timestamp: new Date().toLocaleTimeString('en-IN', { hour12: false }) + '.' + Math.floor(Math.random() * 900 + 100) + ' IST',
-        eventType: nextId % 2 === 0 ? 'DPDP_CONSENT_VERIFIED' : 'LOAN_APPROVAL_TRACE',
-        payload: nextId % 2 === 0 ? 'consent_id=c_9921 | purpose=CREDIT_EVAL' : 'risk_index=0.04 | decision=APPROVED',
-        verified: true,
-      };
-      setBlocks((prev) => [...prev.slice(1), newBlock]);
+      setBlocks((prev) => {
+        const lastBlock = prev[prev.length - 1];
+        const nextId = lastBlock.id + 1;
+        const randomHex = Math.random().toString(16).substring(2, 10) + Math.random().toString(16).substring(2, 10);
+        const newBlock: Block = {
+          id: nextId,
+          hash: randomHex + 'a0b1c2d3e4f5',
+          prevHash: lastBlock.hash.substring(0, 32),
+          timestamp: new Date().toLocaleTimeString('en-IN', { hour12: false }) + '.' + Math.floor(Math.random() * 900 + 100) + ' IST',
+          eventType: nextId % 2 === 0 ? 'DPDP_CONSENT_VERIFIED' : 'LOAN_APPROVAL_TRACE',
+          payload: nextId % 2 === 0 ? 'consent_id=c_9921 | purpose=CREDIT_EVAL' : 'risk_index=0.04 | decision=APPROVED',
+          verified: true,
+        };
+        return [...prev.slice(1), newBlock];
+      });
       setIsInjecting(false);
     }, 400);
   };
@@ -72,7 +74,7 @@ export function LiveHashChainVisual() {
   useEffect(() => {
     const interval = setInterval(addLiveBlock, 4000);
     return () => clearInterval(interval);
-  }, [blocks]);
+  }, []);
 
   return (
     // Outer white frame — matches the hero evidence panel & how-it-works

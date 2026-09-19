@@ -109,7 +109,7 @@ export function MetricsSection() {
           >
             Proof, not promises.
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-xl mx-auto">
+          <p className="section-subheading text-center">
             Published benchmarks, open architecture, and no proprietary black boxes.
             You should be able to verify everything Blocklog claims.
           </p>

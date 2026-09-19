@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
-import { Shield, Lock, Server, Key, FileCheck, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Shield, Lock, Server, Key } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -46,7 +46,7 @@ export default function SecurityPage() {
             >
               Security &amp; Cryptographic Proofs.
             </h1>
-            <p className="text-[1.0625rem] text-slate-600">
+            <p className="section-subheading text-center">
               Designed from the ground up for bank-grade auditability, zero-trust data handling, and regulatory compliance.
             </p>
           </div>

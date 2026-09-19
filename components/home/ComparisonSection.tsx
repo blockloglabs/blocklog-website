@@ -82,7 +82,7 @@ export function ComparisonSection() {
           >
             Traditional logging vs Blocklog.
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-xl mx-auto">
+          <p className="section-subheading text-center">
             Logging infrastructure was built for operational debugging, not regulatory evidence.
             Blocklog was purpose-built for compliance.
           </p>

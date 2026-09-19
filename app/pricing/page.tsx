@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
-import { Check, Shield, ArrowRight, HelpCircle } from 'lucide-react';
+import { Check, ArrowRight, HelpCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Pricing — Blocklog AI Compliance Infrastructure',
@@ -126,7 +126,7 @@ export default function PricingPage() {
             <br />
             <span className="text-blue-600">Start free, scale with volume.</span>
           </h1>
-          <p className="text-[1.0625rem] text-slate-600 max-w-2xl mx-auto text-pretty">
+          <p className="section-subheading text-center">
             Capture decisions, generate cryptographic evidence, and satisfy regulators.
             No hidden seat taxes — pay for the decision volume your AI systems process.
           </p>

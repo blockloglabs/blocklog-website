@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { CodeTerminal } from "@/components/ui/CodeTerminal";
+import { ArrowRight, AlertTriangle, Terminal } from "lucide-react";
 
 type Field = {
   name: string;
@@ -27,29 +29,24 @@ type ApiSectionProps = {
   example: string;
 };
 
-function CodeBlock({ code, small = false }: { code: string; small?: boolean }) {
-  return (
-    <pre className={["overflow-x-auto rounded-xl border border-white/10 bg-black/30 text-zinc-200", small ? "p-4 text-[13px] leading-6" : "p-4 text-sm leading-6 sm:p-5"].join(" ")}>
-      <code>{code}</code>
-    </pre>
-  );
-}
-
 function Callout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-4 rounded-xl border border-amber-400/20 bg-amber-400/[0.06] px-4 py-3 text-sm leading-6 text-amber-200">
-      <span className="font-semibold">Note — </span>
-      {children}
+    <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-[13.5px] leading-relaxed text-amber-900 flex items-start gap-2.5">
+      <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+      <div>
+        <strong className="font-semibold">Note — </strong>
+        {children}
+      </div>
     </div>
   );
 }
 
 function NoteList({ notes }: { notes: string[] }) {
   return (
-    <ul className="mt-4 space-y-1.5 text-[13px] leading-6 text-muted">
+    <ul className="mt-4 space-y-1.5 text-[13px] leading-relaxed text-slate-600">
       {notes.map((n, i) => (
         <li key={i} className="flex gap-2">
-          <span className="text-zinc-500">—</span>
+          <span className="text-slate-400 font-bold">—</span>
           <span>{n}</span>
         </li>
       ))}
@@ -59,43 +56,56 @@ function NoteList({ notes }: { notes: string[] }) {
 
 function ApiSection({ id, eyebrow, title, description, signature, paramsLabel = "Parameters", params, warning, list, notes, example }: ApiSectionProps) {
   return (
-    <section id={id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{eyebrow}</p>
-      <h2 className="text-lg font-semibold tracking-tight text-white"><code>{title}</code></h2>
-      <p className="mt-3 text-sm leading-7 text-muted sm:text-[15px]">{description}</p>
+    <section id={id} className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 shadow-sm">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full" style={{ fontFamily: 'var(--font-mono)' }}>
+          {eyebrow}
+        </span>
+      </div>
+      <h2 className="text-[1.25rem] font-bold tracking-tight text-slate-900 font-mono" style={{ fontFamily: 'var(--font-mono)' }}>
+        {title}
+      </h2>
+      <p className="mt-2 text-[14px] leading-relaxed text-slate-600">{description}</p>
       {warning && <Callout>{warning}</Callout>}
-      <div className="mt-4"><CodeBlock code={signature} /></div>
+      
+      <div className="mt-4">
+        <CodeTerminal title="signature.ts" language="typescript" code={signature} />
+      </div>
+
       {params && params.length > 0 && (
         <div className="mt-5">
-          <h3 className="text-sm font-semibold text-white">{paramsLabel}</h3>
-          <ul className="mt-3 space-y-3 text-sm leading-7 text-muted">
+          <h3 className="text-[13px] font-bold uppercase tracking-wider text-slate-400 mb-3">{paramsLabel}</h3>
+          <ul className="space-y-2.5 text-[13.5px] leading-relaxed">
             {params.map((param) => (
-              <li key={param.name} className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
-                <code className="text-zinc-100">{param.name}</code>
-                <span className="text-zinc-400"> · {param.type}</span>
-                <p className="mt-1">{param.description}</p>
+              <li key={param.name} className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
+                <code className="text-blue-700 font-bold font-mono text-[13px]">{param.name}</code>
+                <span className="text-slate-500 font-mono text-[12px]"> · {param.type}</span>
+                <p className="mt-1 text-slate-600 text-[13px]">{param.description}</p>
               </li>
             ))}
           </ul>
         </div>
       )}
+
       {list && list.items.length > 0 && (
         <div className="mt-5">
-          <h3 className="text-sm font-semibold text-white">{list.label}</h3>
-          <ul className="mt-3 space-y-3 text-sm leading-7 text-muted">
+          <h3 className="text-[13px] font-bold uppercase tracking-wider text-slate-400 mb-2">{list.label}</h3>
+          <ul className="space-y-2.5 text-[13.5px] leading-relaxed">
             {list.items.map((item) => (
-              <li key={item.name} className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
-                <code className="text-zinc-100">{item.name}</code>
-                <p className="mt-1">{item.description}</p>
+              <li key={item.name} className="rounded-xl border border-slate-100 bg-slate-50/70 p-3.5">
+                <code className="text-slate-900 font-semibold font-mono text-[13px]">{item.name}</code>
+                <p className="mt-1 text-slate-600 text-[13px]">{item.description}</p>
               </li>
             ))}
           </ul>
         </div>
       )}
+
       <div className="mt-5">
-        <h3 className="text-sm font-semibold text-white">Example</h3>
-        <div className="mt-3"><CodeBlock code={example} small /></div>
+        <h3 className="text-[13px] font-bold uppercase tracking-wider text-slate-400 mb-2">Example</h3>
+        <CodeTerminal title="example.ts" language="typescript" code={example} />
       </div>
+
       {notes && notes.length > 0 && <NoteList notes={notes} />}
     </section>
   );
@@ -106,17 +116,17 @@ const sections: ApiSectionProps[] = [
     id: "constructor",
     eyebrow: "Constructor",
     title: "new BlocklogClient()",
-    description: "The main entry point and orchestration layer. Coordinates configuration, tracing, the event pipeline, queues, and transport — while keeping minimal business logic of its own.",
+    description: "The main entry point and orchestration layer. Coordinates configuration, tracing, the event pipeline, queues, and transport.",
     signature: `new BlocklogClient(
   config: BlocklogConfig,
   dependencies?: ClientDependencies
 )`,
     params: [
       { name: "config", type: "BlocklogConfig", description: "Configuration object. See BlocklogConfig below." },
-      { name: "dependencies", type: "ClientDependencies, optional", description: "Dependency injection overrides — transport, retry, buffer, processor, memoryQueue, persistentQueue, deadLetterQueue. Mainly used for testing." },
+      { name: "dependencies", type: "ClientDependencies, optional", description: "Dependency injection overrides for testing." },
     ],
     list: {
-      label: "Key client properties",
+      label: "Key Client Properties",
       items: [
         { name: "decisions: DecisionsClient", description: "Create, get, list, search, update, and verify decision records." },
         { name: "traces: TracesClient", description: "Retrieve traces and trace timelines." },
@@ -124,12 +134,12 @@ const sections: ApiSectionProps[] = [
         { name: "incidents: IncidentsClient", description: "Create, update, assign, resolve, and close incidents." },
         { name: "compliance: ComplianceClient", description: "Generate audits, dashboards, and exportable evidence." },
         { name: "replay: ReplayClient", description: "Reconstruct, verify, replay, and compare traces. Aliased as client.forensics." },
-        { name: "traceManager: typeof TraceManager", description: "Static span-management class — see TraceManager below." },
+        { name: "traceManager: typeof TraceManager", description: "Static span-management class." },
       ],
     },
     example: `const client = new BlocklogClient({
   apiKey: 'your-api-key',
-  endpoint: 'base_url',
+  endpoint: 'https://api.blocklogsecurity.com',
   batchSize: 100,
   flushInterval: 5000
 });`,
@@ -138,7 +148,7 @@ const sections: ApiSectionProps[] = [
     id: "configuration",
     eyebrow: "Type",
     title: "BlocklogConfig",
-    description: "The configuration object passed to the BlocklogClient constructor. Resolved into a ResolvedConfig internally, with environment-variable fallbacks and defaults applied.",
+    description: "The configuration object passed to the BlocklogClient constructor.",
     signature: `interface BlocklogConfig {
   apiKey: string;
   endpoint?: string;
@@ -161,10 +171,10 @@ const sections: ApiSectionProps[] = [
       { name: "timeout", type: "number, optional", description: "Per-request timeout in milliseconds." },
       { name: "retryCount", type: "number, optional", description: "Automatic retry attempts on failure." },
       { name: "enableSigning", type: "boolean, optional", description: "Turn on tamper-evident event signing." },
-      { name: "signingKey", type: "string, optional", description: "Key used for signing, when enableSigning is true." },
+      { name: "signingKey", type: "string, optional", description: "Key used for signing when enableSigning is true." },
       { name: "signingAlg", type: "'hmac-sha256' | 'ed25519', optional", description: "Signing algorithm. Defaults to hmac-sha256." },
       { name: "enableCompression", type: "boolean, optional", description: "Compress event payloads before sending." },
-      { name: "debug", type: "boolean, optional", description: "Log every outbound request to stderr." },
+      { name: "debug", type: "boolean, optional", description: "Log outbound requests to console in development." },
     ],
     example: `const client = new BlocklogClient({
   apiKey: process.env.BLOCKLOG_API_KEY!,
@@ -177,7 +187,7 @@ const sections: ApiSectionProps[] = [
     id: "event-methods",
     eyebrow: "Event Methods",
     title: "client.event() / client.enqueue()",
-    description: "Send a single event immediately with event(), or buffer it for batched delivery with enqueue(). Both take the same arguments — enqueue() simply resolves to null while the event sits in the buffer.",
+    description: "Send a single event immediately with event(), or buffer it for batched delivery with enqueue().",
     signature: `event(eventType: string, payload: any, options?: EventOptions): Promise<IngestResponse>
 enqueue(eventType: string, payload: any, options?: EventOptions): Promise<IngestResponse | null>`,
     params: [
@@ -186,36 +196,26 @@ enqueue(eventType: string, payload: any, options?: EventOptions): Promise<Ingest
       { name: "options", type: "EventOptions, optional", description: "metadata, trace_id, span_id, and timestamp overrides." },
     ],
     example: `await client.event('AGENT_RUN', {
-  agent_id: 'my-agent',
-  input: 'test input',
-  output: 'test output'
-});
-
-await client.enqueue('TOOL_CALL', {
-  tool_name: 'calculator',
-  input: '2 + 2',
-  output: '4'
+  agent_id: 'credit-scoring-v2',
+  input: { applicant_id: 'app_8819', score: 742 },
+  output: { approved: true, limit: 500000 }
 });`,
   },
   {
     id: "add-hook",
     eyebrow: "Middleware Method",
     title: "client.addHook()",
-    description: "Register a middleware hook that can transform, enrich, validate, or filter every outbound event. Hooks run in the order they were added and may be async.",
+    description: "Register a middleware hook that can transform, enrich, validate, or filter outbound events.",
     signature: `addHook(hook: MiddlewareHook): BlocklogClient
 
 type MiddlewareHook = (event: EventEnvelope) => EventEnvelope | Promise<EventEnvelope> | null`,
     params: [
-      { name: "hook", type: "MiddlewareHook", description: "Receives an EventEnvelope and returns a (possibly modified) envelope, or null to drop the event entirely." },
+      { name: "hook", type: "MiddlewareHook", description: "Receives an EventEnvelope and returns modified envelope, or null to drop." },
     ],
     example: `client.addHook((event) => {
-  event.metadata = { ...event.metadata, enriched: true };
+  event.metadata = { ...event.metadata, environment: 'production' };
   return event;
 });`,
-    notes: [
-      "Returning null from a hook skips the event entirely — useful for filtering debug events in production.",
-      "addHook() returns the client itself, so calls can be chained.",
-    ],
   },
   {
     id: "lifecycle-methods",
@@ -226,69 +226,39 @@ type MiddlewareHook = (event: EventEnvelope) => EventEnvelope | Promise<EventEnv
 shutdown(): Promise<void>
 health(): Promise<HealthStatus>`,
     list: {
-      label: "What each call does",
+      label: "Lifecycle Methods",
       items: [
-        { name: "flush()", description: "Flushes the pipeline, buffer, and queues, then awaits transport completion." },
-        { name: "shutdown()", description: "Flushes everything, persists the queue, stops timers, and closes transports to prevent event loss." },
-        { name: "health()", description: "Returns { healthy, queueDepth, pendingEvents, transportReady } for monitoring." },
+        { name: "flush()", description: "Flushes the pipeline, buffer, and queues immediately." },
+        { name: "shutdown()", description: "Flushes all buffers, persists the queue, and cleanly stops background timers." },
+        { name: "health()", description: "Returns { healthy, queueDepth, pendingEvents, transportReady }." },
       ],
     },
     example: `await client.flush();
 
 const health = await client.health();
-console.log(health);
-// { healthy: true, queueDepth: 0, pendingEvents: 0, transportReady: true }
-
-await client.shutdown();`,
+console.log(health.healthy); // true`,
   },
   {
     id: "trace-agent",
     eyebrow: "Decorator",
     title: "@traceAgent",
-    description: "Trace an AI agent method automatically, emitting AGENT_START, AGENT_COMPLETE, and AGENT_ERROR events with input/output, duration, and trace context.",
+    description: "Trace an AI agent method automatically, emitting AGENT_START, AGENT_COMPLETE, and AGENT_ERROR events.",
     signature: `function traceAgent(options: AgentOptions | string)`,
     params: [
-      { name: "options", type: "AgentOptions | string", description: "An agent name string, or an options object: { name, version, tags, metadata }." },
+      { name: "options", type: "AgentOptions | string", description: "Agent name string, or an options object: { name, version, tags, metadata }." },
     ],
-    warning: "Decorators read from the global client, not an instance you pass in directly — call setGlobalClient() before any @traceAgent method runs.",
-    example: `class WeatherAgent {
-  @traceAgent('weather-agent')
-  async getWeather(location: string): Promise<string> {
-    const response = await fetch(\`https://api.weather.com/\${location}\`);
-    return (await response.json()).weather;
+    example: `class CreditAgent {
+  @traceAgent('credit-decisioning')
+  async evaluateRisk(applicantId: string): Promise<DecisionResult> {
+    return { status: 'APPROVED' };
   }
 }`,
-    notes: [
-      "Trace context (trace ID, span ID, parent span ID) propagates automatically to nested @traceAgent calls.",
-      "On error, AGENT_ERROR is emitted with the error details before it propagates to the caller.",
-    ],
-  },
-  {
-    id: "execute-agent",
-    eyebrow: "Method",
-    title: "executeAgent()",
-    description: "Trace an agent execution without a decorator — useful for functional code or one-off calls.",
-    signature: `function executeAgent<T>(
-  agentId: string,
-  fn: () => Promise<T>,
-  options?: AgentOptions
-): Promise<T>`,
-    params: [
-      { name: "agentId", type: "string", description: "Agent identifier." },
-      { name: "fn", type: "() => Promise<T>", description: "Function to execute and trace." },
-      { name: "options", type: "AgentOptions, optional", description: "version, tags, metadata." },
-    ],
-    example: `const result = await executeAgent(
-  'my-agent',
-  async () => 'agent result',
-  { version: '1.0', tags: ['test'], metadata: { custom: 'value' } }
-);`,
   },
   {
     id: "trace-manager",
     eyebrow: "Tracing",
     title: "TraceManager",
-    description: "Static class managing span lifecycle and context propagation across async operations, via Async Local Storage.",
+    description: "Static class managing span lifecycle and context propagation across async operations via AsyncLocalStorage.",
     signature: `class TraceManager {
   static startSpan(name: string, options?: SpanOptions): Span
   static endSpan(span: Span | string, status?: string): void
@@ -296,88 +266,11 @@ await client.shutdown();`,
   static parentSpan(): Span | undefined
   static runWithSpan<T>(span: Span, fn: () => Promise<T>): Promise<T>
 }`,
-    list: {
-      label: "Static methods",
-      items: [
-        { name: "startSpan(name, options?)", description: "Creates and starts a new span, storing it in Async Local Storage." },
-        { name: "endSpan(span, status?)", description: "Finalizes a span, optionally recording a status such as \"success\" or \"error\"." },
-        { name: "currentSpan()", description: "Returns the active span for the current async context, if any." },
-        { name: "parentSpan()", description: "Returns the parent of the active span, if any." },
-        { name: "runWithSpan(span, fn)", description: "Runs fn() with span set as the active context for any nested operations." },
-      ],
-    },
-    example: `const span = TraceManager.startSpan('my-operation');
+    example: `const span = TraceManager.startSpan('evaluate-loan');
 const result = await TraceManager.runWithSpan(span, async () => {
-  return 'result';
+  return await processLoan();
 });
 TraceManager.endSpan(span, 'success');`,
-    notes: [
-      "Spans propagate automatically across await boundaries — no manual threading of IDs required.",
-      "Always end a span, ideally in a finally block, so it isn't left open if the wrapped code throws.",
-    ],
-  },
-  {
-    id: "approvals",
-    eyebrow: "Governance Method",
-    title: "client.approvals.create()",
-    description: "Request human review for a decision. Part of the ApprovalClient, which also exposes approve(), reject(), status(), and list(). Aliased as client.hitl.",
-    signature: `client.approvals.create(data: Record<string, any>): Promise<any>
-client.approvals.approve(id: string, reason?: string): Promise<any>
-client.approvals.reject(id: string, reason?: string): Promise<any>
-client.approvals.status(id: string): Promise<any>
-client.approvals.list(params?: Record<string, any>): Promise<any>`,
-    params: [
-      { name: "decisionId", type: "string", description: "ID of the decision this approval request relates to." },
-      { name: "reason", type: "string", description: "Why human review is needed." },
-      { name: "metadata", type: "Record<string, any>, optional", description: "Extra context, e.g. required_approver, expires_at, approval_level." },
-    ],
-    example: `const approval = await client.approvals.create({
-  decisionId: 'decision-123',
-  reason: 'High value trade requires approval'
-});
-
-await client.approvals.approve(approval.id, 'Approved based on risk analysis');
-const status = await client.approvals.status(approval.id);`,
-    notes: ["Approval requests resolve to a status of \"pending\", \"approved\", or \"rejected\"."],
-  },
-  {
-    id: "replay",
-    eyebrow: "Forensic Method",
-    title: "client.replay.reconstruct()",
-    description: "Reconstruct a trace for debugging and analysis. Part of the ReplayClient, which also exposes verify(), replay(), get(), list(), and compare(). Aliased as client.forensics.",
-    signature: `client.replay.reconstruct(traceId: string, options?: Record<string, any>): Promise<any>
-client.replay.verify(id: string): Promise<any>
-client.replay.replay(id: string, options?: Record<string, any>): Promise<any>
-client.replay.compare(idA: string, idB: string): Promise<any>`,
-    params: [
-      { name: "traceId", type: "string", description: "Trace to reconstruct." },
-      { name: "options", type: "Record<string, any>, optional", description: "include_tool_calls, include_decisions, include_timeline, and similar flags." },
-    ],
-    example: `const reconstruction = await client.replay.reconstruct('trace-123', {
-  include_tool_calls: true,
-  include_decisions: true
-});
-
-const result = await client.replay.replay(reconstruction.replay_id, {
-  speed: 2,
-  stop_on_error: false
-});`,
-    notes: ["compare(idA, idB) returns { identical, differences, similarity_score } for A/B debugging two executions."],
-  },
-  {
-    id: "verify-decision",
-    eyebrow: "Verification Method",
-    title: "client.decisions.verify()",
-    description: "Confirm a decision record's integrity and that it hasn't been tampered with since creation.",
-    signature: `client.decisions.verify(id: string): Promise<any>`,
-    params: [{ name: "id", type: "string", description: "Decision ID to verify." }],
-    example: `const verification = await client.decisions.verify('decision-123');
-
-if (verification.valid) {
-  console.log('Decision is valid');
-} else {
-  console.log('Decision verification failed:', verification.reason);
-}`,
   },
 ];
 
@@ -399,19 +292,19 @@ type IntegrationProps = {
 
 function HookTable({ rows }: { rows: HookRow[] }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-white/10">
+    <div className="overflow-x-auto rounded-xl border border-slate-200">
       <table className="w-full min-w-[480px] text-left text-sm">
         <thead>
-          <tr className="border-b border-white/10 bg-white/[0.03]">
-            <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-muted">Method</th>
-            <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-muted">Use it to…</th>
+          <tr className="border-b border-slate-200 bg-slate-50">
+            <th className="px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">Method</th>
+            <th className="px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">Description</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-slate-100">
           {rows.map((r) => (
-            <tr key={r.method} className="border-b border-white/5 last:border-0">
-              <td className="px-4 py-2.5 align-top"><code className="text-zinc-100">{r.method}</code></td>
-              <td className="px-4 py-2.5 align-top leading-6 text-muted">{r.description}</td>
+            <tr key={r.method} className="hover:bg-slate-50/50 transition-colors">
+              <td className="px-4 py-2.5 align-top"><code className="text-blue-700 font-mono text-[12.5px] font-semibold">{r.method}</code></td>
+              <td className="px-4 py-2.5 align-top text-[13px] leading-relaxed text-slate-600">{r.description}</td>
             </tr>
           ))}
         </tbody>
@@ -422,27 +315,26 @@ function HookTable({ rows }: { rows: HookRow[] }) {
 
 function IntegrationSection({ id, name, description, setup, usage, usageLabel, hooks, notes }: IntegrationProps) {
   return (
-    <section id={id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Integration</p>
-      <h3 className="text-lg font-semibold tracking-tight text-white">{name}</h3>
-      <p className="mt-3 text-sm leading-7 text-muted sm:text-[15px]">{description}</p>
+    <section id={id} className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 shadow-sm">
+      <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3" style={{ fontFamily: 'var(--font-mono)' }}>
+        Integration
+      </span>
+      <h3 className="text-[1.25rem] font-bold tracking-tight text-slate-900">{name}</h3>
+      <p className="mt-2 text-[14px] leading-relaxed text-slate-600">{description}</p>
 
-      <div className="mt-4">
-        <h4 className="text-sm font-semibold text-white">Setup</h4>
-        <div className="mt-3"><CodeBlock code={setup} small /></div>
-      </div>
-
-      <div className="mt-4">
-        <h4 className="text-sm font-semibold text-white">{usageLabel ?? "Automatic tracing"}</h4>
-        <div className="mt-3"><CodeBlock code={usage} small /></div>
+      <div className="mt-5">
+        <h4 className="text-[13px] font-bold uppercase tracking-wider text-slate-400 mb-2">Setup</h4>
+        <CodeTerminal title="setup.ts" language="typescript" code={setup} />
       </div>
 
       <div className="mt-5">
-        <h4 className="text-sm font-semibold text-white">Manual tracing hooks</h4>
-        <p className="mt-2 text-[13px] leading-6 text-muted">
-          For cases the automatic instrumentation doesn&rsquo;t cover, call the corresponding hook directly.
-        </p>
-        <div className="mt-3"><HookTable rows={hooks} /></div>
+        <h4 className="text-[13px] font-bold uppercase tracking-wider text-slate-400 mb-2">{usageLabel ?? "Automatic Tracing"}</h4>
+        <CodeTerminal title="usage.ts" language="typescript" code={usage} />
+      </div>
+
+      <div className="mt-6">
+        <h4 className="text-[13px] font-bold uppercase tracking-wider text-slate-400 mb-2">Manual Tracing Hooks</h4>
+        <HookTable rows={hooks} />
       </div>
 
       {notes && notes.length > 0 && <NoteList notes={notes} />}
@@ -454,7 +346,7 @@ const integrations: IntegrationProps[] = [
   {
     id: "langchain",
     name: "LangChain",
-    description: "Wraps LangChain's callback system to trace chains, tools, LLM calls, and agents.",
+    description: "Wraps LangChain's callback system to trace chains, tools, LLM calls, and agents automatically.",
     setup: `import { BlocklogClient, setGlobalClient, instrumentLangChain } from '@blocklog/sdk';
 
 const client = new BlocklogClient({ apiKey: 'your-api-key' });
@@ -467,7 +359,7 @@ const agent = await createOpenAIFunctionsAgent(llm, tools, prompt);
 const executor = new AgentExecutor({ agent, tools, verbose: true });
 
 // Execution is automatically traced
-const result = await executor.invoke({ input: 'What is the weather?' });`,
+const result = await executor.invoke({ input: 'Evaluate credit eligibility' });`,
     hooks: [
       { method: "handleChainStart(chain, inputs, runId)", description: "Mark a chain's start. chain is { name, metadata? }." },
       { method: "handleChainEnd(outputs, runId)", description: "Mark a chain's successful completion." },
@@ -476,41 +368,11 @@ const result = await executor.invoke({ input: 'What is the weather?' });`,
       { method: "handleLLMStart(llm, prompts, runId)", description: "Mark an LLM call's start." },
       { method: "handleLLMEnd(output, runId)", description: "Mark an LLM call's completion." },
     ],
-    notes: [
-      "For deeper control, subclass BaseCallbackHandler and forward each callback to the matching tracer.handle*() method.",
-      "Set the global client with setGlobalClient() before calling instrumentLangChain() — the tracer reads from the global client.",
-    ],
-  },
-  {
-    id: "langgraph",
-    name: "LangGraph",
-    description: "Extends the same hook pattern to LangGraph's node, edge, and graph lifecycle.",
-    setup: `import { BlocklogClient, setGlobalClient, instrumentLangGraph } from '@blocklog/sdk';
-
-const client = new BlocklogClient({ apiKey: 'your-api-key' });
-setGlobalClient(client);
-
-const hooks = instrumentLangGraph();`,
-    usage: `const compiledGraph = graph.compile();
-
-// Node, edge, and graph execution are automatically traced
-const result = await compiledGraph.invoke({ input: 'test input' });`,
-    hooks: [
-      { method: "onGraphStart({ graph_id, metadata? })", description: "Mark the start of a graph run." },
-      { method: "onGraphEnd({ graph_id })", description: "Mark the end of a graph run." },
-      { method: "onNodeStart(nodeName, state, runId)", description: "Mark a node's start, including the state it received." },
-      { method: "onNodeEnd(nodeName, state, runId)", description: "Mark a node's completion, including the state it produced." },
-      { method: "onEdge(from, to, condition, runId)", description: "Mark an edge transition, including whether it matched a condition." },
-    ],
-    notes: [
-      "Conditional edges added via addConditionalEdges() are traced the same way as static edges.",
-      "State objects passed to onNodeStart / onNodeEnd are recorded as-is, so keep them serializable.",
-    ],
   },
   {
     id: "openai-agents",
     name: "OpenAI Agents",
-    description: "Traces OpenAI chat completion calls, tool and function calls, and the messages exchanged during an agent run.",
+    description: "Traces OpenAI chat completion calls, tool/function calls, and messages exchanged during an agent run.",
     setup: `import { BlocklogClient, setGlobalClient, instrumentOpenAIAgents } from '@blocklog/sdk';
 
 const client = new BlocklogClient({ apiKey: 'your-api-key' });
@@ -523,108 +385,73 @@ const openai = new OpenAI({ apiKey: 'your-openai-key' });
 
 // Chat completions, tool calls, and messages are automatically traced
 const response = await openai.chat.completions.create({
-  model: 'gpt-4',
-  messages: [{ role: 'user', content: 'Hello' }]
+  model: 'gpt-4o',
+  messages: [{ role: 'user', content: 'Process application' }]
 });`,
     hooks: [
       { method: "onAgentRunStart(agentId, input)", description: "Mark the start of an agent run." },
       { method: "onAgentRunEnd(agentId, output)", description: "Mark an agent run's successful completion." },
       { method: "onAgentRunError(agentId, error)", description: "Mark an agent run's failure." },
       { method: "onToolCall(toolName, args)", description: "Record a tool call's name and arguments." },
-      { method: "onFunctionCall(name, args)", description: "Record a legacy function-calling invocation." },
-      { method: "onMessage(role, content)", description: "Record a message exchanged during the run — user, assistant, or system." },
-    ],
-    notes: [
-      "Call onAgentRunError() inside a catch block and re-throw, so failures are traced without being swallowed.",
-      "Metadata such as user_id, session_id, or environment can be passed alongside input on onAgentRunStart().",
+      { method: "onMessage(role, content)", description: "Record a message exchanged during the run." },
     ],
   },
 ];
 
-const commonBehaviour = [
-  "All instrument*() functions read configuration from the global client — call setGlobalClient() before instrumenting.",
-  "Trace context (trace ID, span ID, parent span ID) is preserved across async operations via Async Local Storage, the same mechanism TraceManager itself uses.",
-  "Errors are always traced — automatic instrumentation captures exceptions before they propagate, and manual hooks expose explicit onError / handle*Error methods for the same purpose.",
-  "Each integration also accepts a custom callback handler class for frameworks that support pluggable callbacks, letting you forward lifecycle events to the tracer or hooks object yourself.",
-];
-
 export default function TypeScriptSdkDocsPage() {
   return (
-    <main
-      className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
-      style={{ position: "relative", zIndex: 1 }}
-    >
-      <div className="space-y-10">
-        <header className="max-w-3xl">
-          <p className="eyebrow">SDK Reference</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            TypeScript SDK Reference
-          </h1>
-          <p className="mt-4 text-base leading-8 text-muted">
-            Constructor and configuration, event and lifecycle methods, decorators, tracing, governance,
-            forensic, and verification methods, plus framework integrations for the Blocklog TypeScript
-            client.
-          </p>
-          <nav className="mt-5 flex flex-wrap gap-2 text-xs">
-            <a
-              href="#reference"
-              className="rounded-full border border-white/10 px-3 py-1.5 text-muted transition-colors hover:bg-white/[0.06] hover:text-white"
-            >
-              Core SDK
-            </a>
-            <a
-              href="#integrations"
-              className="rounded-full border border-white/10 px-3 py-1.5 text-muted transition-colors hover:bg-white/[0.06] hover:text-white"
-            >
-              Integrations
-            </a>
-          </nav>
-        </header>
+    <div className="max-w-4xl space-y-10">
+      <header>
+        <span className="eyebrow mb-2">SDK Reference</span>
+        <h1
+          className="text-[2.25rem] font-bold text-slate-900 tracking-tight mb-3"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          TypeScript / Node.js SDK Reference
+        </h1>
+        <p className="section-subheading max-w-2xl">
+          Constructor, configuration, event streaming, decorators, tracing, and framework integrations for TypeScript and Node.js.
+        </p>
+      </header>
 
-        <div id="reference" className="space-y-6">
-          {sections.map((section) => (
-            <ApiSection key={section.id} {...section} />
-          ))}
-        </div>
-
-        <div className="space-y-6">
-          <div className="max-w-3xl border-t border-white/10 pt-8">
-            <p className="eyebrow">Framework instrumentation</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white" id="integrations">
-              Integrations
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-muted sm:text-[15px]">
-              Native instrumentation for LangChain, LangGraph, and OpenAI Agents. Each integration wires
-              into the framework&rsquo;s callback or hook system to trace chains, nodes, tools, and LLM
-              calls automatically, with manual hooks available for anything outside the automatic path.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-            <h3 className="text-sm font-semibold text-white">Common behaviour across all integrations</h3>
-            <NoteList notes={commonBehaviour} />
-          </div>
-
-          {integrations.map((integration) => (
-            <IntegrationSection key={integration.id} {...integration} />
-          ))}
-        </div>
-
-        <nav className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row">
-          <Link
-            className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-            href="/docs/api-reference"
-          >
-            API Reference
-          </Link>
-          <Link
-            className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
-            href="/docs/architecture"
-          >
-            Architecture
-          </Link>
-        </nav>
+      <div id="reference" className="space-y-8">
+        {sections.map((section) => (
+          <ApiSection key={section.id} {...section} />
+        ))}
       </div>
-    </main>
+
+      <div className="space-y-8 pt-8 border-t border-slate-200">
+        <div>
+          <span className="eyebrow mb-2">Framework Instrumentation</span>
+          <h2 className="text-[1.75rem] font-bold text-slate-900 tracking-tight mb-2" id="integrations" style={{ fontFamily: 'var(--font-display)' }}>
+            Framework Integrations
+          </h2>
+          <p className="text-[14px] leading-relaxed text-slate-600">
+            Native instrumentation for LangChain and OpenAI Agents. Wires into callback systems to trace chains, tools, and LLM calls automatically.
+          </p>
+        </div>
+
+        {integrations.map((integration) => (
+          <IntegrationSection key={integration.id} {...integration} />
+        ))}
+      </div>
+
+      <nav className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-200">
+        <Link
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-[14px] font-semibold text-white shadow-sm transition-all hover:bg-blue-700"
+          href="/docs/api-reference"
+        >
+          REST API Reference
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+        <Link
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-[14px] font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+          href="/docs/python-sdk"
+        >
+          <Terminal className="w-4 h-4 text-blue-600" />
+          Python SDK Reference
+        </Link>
+      </nav>
+    </div>
   );
 }

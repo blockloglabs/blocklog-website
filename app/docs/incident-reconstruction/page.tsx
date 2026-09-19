@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { CodeTerminal } from "@/components/ui/CodeTerminal";
+import { ArrowRight, ShieldAlert, GitFork, RefreshCw, FileSearch } from "lucide-react";
 
 const setupCode = `import os
 import random
@@ -71,108 +73,167 @@ if __name__ == "__main__":
 
 const replayCode = `import blocklog
 
-session = blocklog.replay(trace_id="your-trace-id-here")
+# 1. Initialize forensic replay session for the trace
+session = blocklog.replay(trace_id="trc_8f92a10b4c7e")
 
+# 2. Iterate through causal timeline in sequence
 for event in session.timeline():
     print(f"[{event.get('at')}] {event.get('item_type')}: {event.get('summary')}")
 
+# 3. Request automated root cause inference
 cause = session.root_cause()
 if cause["detected"]:
     print(f"Incident: {cause['root_cause_type']}")
     print(f"Explanation: {cause['description']}")
     print(f"Remediation: {cause['remediation']}")`;
 
-function CodeBlock({ code }: { code: string }) {
-  return (
-    <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 text-sm leading-6 text-zinc-200 sm:p-5">
-      <code>{code}</code>
-    </pre>
-  );
-}
-
-function StorySection({ step, title, description, code }: { step: string; title: string; description: string; code: string }) {
-  return (
-    <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{step}</p>
-      <h2 className="text-lg font-semibold tracking-tight text-white">{title}</h2>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-muted sm:text-[15px]">{description}</p>
-      <div className="mt-5"><CodeBlock code={code} /></div>
-    </section>
-  );
-}
-
 export default function IncidentReconstructionDocsPage() {
   return (
-    <main
-      className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
-      style={{ position: "relative", zIndex: 1 }}
-    >
-      <div className="space-y-8">
-        <header className="max-w-3xl">
-          <p className="eyebrow">End-to-End Example</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            AI Agent Incident Reconstruction
-          </h1>
-          <p className="mt-4 text-base leading-8 text-muted">
-            Walkthrough of a multi-agent hedge fund workflow where a risk limit violation triggers a human-in-the-loop review and downstream forensic replay.
-          </p>
-        </header>
+    <div className="max-w-4xl space-y-10">
+      <header>
+        <span className="eyebrow mb-2">Forensics & Replay</span>
+        <h1
+          className="text-[2.25rem] font-bold text-slate-900 tracking-tight mb-3"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          AI Agent Incident Reconstruction
+        </h1>
+        <p className="section-subheading max-w-2xl">
+          Walkthrough of a multi-agent hedge fund workflow where a risk limit violation triggers a human-in-the-loop review and downstream forensic replay.
+        </p>
+      </header>
 
-        <section className="grid gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:grid-cols-3 sm:p-6">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Workflow</p>
-            <p className="mt-2 text-sm text-white">Analyst → Risk → Executor</p>
+      {/* Overview Cards */}
+      <section className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <GitFork className="h-4 w-4 text-blue-600" />
+            <span
+              className="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Workflow Pattern
+            </span>
           </div>
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Trigger</p>
-            <p className="mt-2 text-sm text-white">Risk limit violation</p>
+          <p className="text-sm font-semibold text-slate-900">Analyst → Risk → Executor</p>
+          <p className="mt-1 text-xs text-slate-500">Autonomous multi-agent chain</p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <ShieldAlert className="h-4 w-4 text-amber-600" />
+            <span
+              className="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Incident Trigger
+            </span>
           </div>
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Outcome</p>
-            <p className="mt-2 text-sm text-white">HITL review + forensic replay</p>
+          <p className="text-sm font-semibold text-slate-900">Risk Limit Violation</p>
+          <p className="mt-1 text-xs text-slate-500">Value exceeds $50,000 threshold</p>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center gap-2 mb-2">
+            <RefreshCw className="h-4 w-4 text-emerald-600" />
+            <span
+              className="text-[11px] font-bold uppercase tracking-wider text-slate-500"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Resolution Path
+            </span>
           </div>
-        </section>
+          <p className="text-sm font-semibold text-slate-900">HITL Review + Replay</p>
+          <p className="mt-1 text-xs text-slate-500">Causal timeline & root cause</p>
+        </div>
+      </section>
 
-        <StorySection
-          step="Step 1"
-          title="Multi-agent setup"
-          description="An analyst agent produces a trading signal, a risk agent checks portfolio limits, and an executor fills the trade. A single WORKFLOW_ID binds the execution context across the workflow so every decision and tool call can be reconstructed later."
-          code={setupCode}
-        />
-
-        <StorySection
-          step="Step 2"
-          title="Query forensics and root cause"
-          description="Once an exception or human review request is raised, the forensic replay API reconstructs the timeline, surfaces the causal chain, and helps identify the root cause behind the incident."
-          code={replayCode}
-        />
-
-        <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-            What this example shows
-          </p>
-          <ul className="space-y-3 text-sm leading-7 text-muted sm:text-[15px]">
-            <li>A shared workflow identifier links the signal, risk evaluation, and review path into one auditable trail.</li>
-            <li>Risk approval becomes an explicit decision object instead of an implicit internal check.</li>
-            <li>Human escalation and replay investigation are part of the same forensic lifecycle.</li>
-          </ul>
-        </section>
-
-        <nav className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row">
-          <Link
-            className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-            href="/docs/quickstart"
+      {/* Step 1: Multi-Agent Setup */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+        <div>
+          <span
+            className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3"
+            style={{ fontFamily: "var(--font-mono)" }}
           >
-            Quickstart Guide
-          </Link>
-          <Link
-            className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
-            href="/docs/api-reference"
+            Step 01
+          </span>
+          <h2
+            className="text-lg font-bold text-slate-900"
+            style={{ fontFamily: "var(--font-display)" }}
           >
-            REST API Reference
-          </Link>
-        </nav>
-      </div>
-    </main>
+            Multi-Agent Instrumentation Setup
+          </h2>
+          <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+            An analyst agent produces a trading signal, a risk agent checks portfolio limits, and an executor fills the trade. A single <code className="text-xs bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded font-mono">WORKFLOW_ID</code> binds the execution context across the workflow so every decision and tool call can be reconstructed later.
+          </p>
+        </div>
+        <CodeTerminal code={setupCode} language="python" title="multi_agent_workflow.py" />
+      </section>
+
+      {/* Step 2: Query Forensics and Root Cause */}
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+        <div>
+          <span
+            className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            Step 02
+          </span>
+          <h2
+            className="text-lg font-bold text-slate-900"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Query Forensics and Automated Root Cause
+          </h2>
+          <p className="mt-1 text-sm text-slate-600 leading-relaxed">
+            Once an exception or human review request is raised, the forensic replay API reconstructs the timeline, surfaces the causal chain, and helps identify the root cause behind the incident.
+          </p>
+        </div>
+        <CodeTerminal code={replayCode} language="python" title="forensic_replay.py" />
+      </section>
+
+      {/* Key Architectural Takeaways */}
+      <section className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6">
+        <div className="flex items-center gap-2 mb-3">
+          <FileSearch className="h-4 w-4 text-blue-600" />
+          <h3
+            className="text-sm font-bold uppercase tracking-wider text-slate-900"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            What this example demonstrates
+          </h3>
+        </div>
+        <ul className="space-y-2.5 text-sm text-slate-600">
+          <li className="flex items-start gap-2.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
+            <span><strong className="text-slate-900">Deterministic Context Binding:</strong> A shared workflow identifier links the signal, risk evaluation, and review path into one auditable trail.</span>
+          </li>
+          <li className="flex items-start gap-2.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
+            <span><strong className="text-slate-900">Explicit Decision Objects:</strong> Risk approval becomes an explicit, verifiable decision entity rather than an opaque internal boolean check.</span>
+          </li>
+          <li className="flex items-start gap-2.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
+            <span><strong className="text-slate-900">Unified Lifecycle:</strong> Human escalation and post-incident replay investigation belong to the exact same cryptographic audit trail.</span>
+          </li>
+        </ul>
+      </section>
+
+      {/* Navigation Footer */}
+      <nav className="flex flex-col gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:justify-between items-center">
+        <Link
+          href="/docs/python-sdk"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors"
+        >
+          ← Python SDK Reference
+        </Link>
+        <Link
+          href="/docs/api-reference"
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
+        >
+          REST API Reference <ArrowRight className="h-4 w-4" />
+        </Link>
+      </nav>
+    </div>
   );
 }

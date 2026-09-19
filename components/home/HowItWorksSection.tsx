@@ -84,7 +84,7 @@ export function HowItWorksSection() {
             <br className="hidden sm:block" />
             <span className="text-blue-600"> in three steps.</span>
           </h2>
-          <p className="text-center text-[1rem] text-slate-600 max-w-2xl mx-auto">
+          <p className="section-subheading text-center">
             Blocklog captures, chains, and stores every AI decision automatically.
             No batch jobs. No manual exports. No gaps in your evidence trail.
           </p>

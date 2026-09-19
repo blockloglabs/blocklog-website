@@ -136,7 +136,7 @@ export function RegulationsSection() {
             <br className="hidden sm:block" />
             <span className="text-slate-500 font-normal"> Aligned with global standards.</span>
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-2xl mx-auto">
+          <p className="section-subheading text-center">
             Blocklog maps every evidence package to specific regulatory requirements.
             When auditors ask for documentation, you know exactly what you have.
           </p>

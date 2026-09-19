@@ -1,215 +1,274 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { useInView, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 
-const reassurancePoints = [
-  {
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M8 1L2 3.5V8c0 3.5 2.75 6.5 6 7 3.25-.5 6-3.5 6-7V3.5L8 1z" stroke="currentColor" strokeWidth="1.1" fill="none" strokeLinejoin="round" />
-        <path d="M5.5 8l2 2L10.5 6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    text: 'No credit card required',
-  },
-  {
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M2 8h12M8 2v12M5 5l6 6M11 5l-6 6" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
-      </svg>
-    ),
-    text: 'Deployment support included',
-  },
-  {
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.1" fill="none" />
-        <path d="M5 8l2 2 4-4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    text: 'Designed for regulated enterprises',
-  },
-  {
-    icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.1" fill="none" />
-        <path d="M8 4v4l3 2" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
-      </svg>
-    ),
-    text: 'Setup in under 5 minutes',
-  },
-];
+/* -------------------------------------------------------------------------- */
+/*  Content                                                                   */
+/* -------------------------------------------------------------------------- */
 
-const statStrip = [
-  { value: '5,000', label: 'free decision traces / mo' },
-  { value: '<5 min', label: 'to first evidence package' },
+const freePromises = ['No credit card required', 'Setup in under 5 minutes'];
+const enterprisePromises = ['Deployment support included', 'Designed for regulated enterprises'];
+
+const stats = [
+  { value: '5,000', label: 'free decision traces per month' },
+  { value: '<5 min', label: 'to your first evidence package' },
   { value: '24 hr', label: 'audit turnaround target' },
 ];
 
+// Illustrative data. Each entry's "prev" is the previous entry's "hash",
+// which is the property that makes the log tamper-evident.
+const ledger = [
+  { action: 'Credit limit approved', hash: '3f9a…c21e', prev: '0000…0000' },
+  { action: 'Claim routed to manual review', hash: '8b41…d7a0', prev: '3f9a…c21e' },
+  { action: 'Identity check flagged', hash: 'e6c2…19b5', prev: '8b41…d7a0' },
+  { action: 'Model version updated', hash: '5d07…a3f8', prev: 'e6c2…19b5' },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Small pieces                                                              */
+/* -------------------------------------------------------------------------- */
+
+function CheckIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M3.5 8.5l3 3 6-6.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PromiseList({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-3.5 space-y-2">
+      {items.map((item) => (
+        <li key={item} className="flex items-center gap-2 text-[13.5px] text-slate-400">
+          <span className="text-blue-400">
+            <CheckIcon />
+          </span>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Ledger: the one animated moment. Entries verify top to bottom, one link   */
+/*  at a time, once, when scrolled into view.                                 */
+/* -------------------------------------------------------------------------- */
+
+function LedgerCard() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const reduceMotion = useReducedMotion();
+  const [verified, setVerified] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    if (reduceMotion) {
+      setVerified(ledger.length);
+      return;
+    }
+
+    const timers = ledger.map((_, i) => setTimeout(() => setVerified(i + 1), 650 + i * 520));
+    return () => timers.forEach(clearTimeout);
+  }, [inView, reduceMotion]);
+
+  const complete = verified === ledger.length;
+
+  return (
+    <div
+      ref={ref}
+      role="group"
+      aria-label="Example of a tamper-evident decision trace ledger"
+      className="rounded-xl border border-white/10 bg-white/[0.03] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-3.5">
+        <span className="text-[13.5px] font-medium text-slate-200">Decision trace ledger</span>
+        <span
+          aria-live="polite"
+          className={`flex items-center gap-2 text-[13px] transition-colors duration-300 motion-reduce:transition-none ${
+            complete ? 'text-emerald-400' : 'text-slate-400'
+          }`}
+        >
+          <span
+            aria-hidden="true"
+            className={`h-1.5 w-1.5 rounded-full ${
+              complete ? 'bg-emerald-400' : 'animate-pulse bg-slate-400 motion-reduce:animate-none'
+            }`}
+          />
+          {complete ? 'Chain intact' : 'Verifying chain'}
+        </span>
+      </div>
+
+      {/* Entries */}
+      <ol className="px-5 py-6">
+        {ledger.map((entry, i) => {
+          const done = verified > i;
+          const linkFilled = verified > i + 1;
+          const isLast = i === ledger.length - 1;
+
+          return (
+            <li key={entry.hash} className={`relative pl-9 ${isLast ? '' : 'pb-7'}`}>
+              {/* Connector to the next entry */}
+              {!isLast && (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-[9px] top-[22px] -bottom-0.5 w-[2px] rounded-full bg-white/10"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-[9px] top-[22px] -bottom-0.5 w-[2px] origin-top rounded-full bg-blue-400 transition-transform duration-500 ease-out motion-reduce:transition-none"
+                    style={{ transform: `scaleY(${linkFilled ? 1 : 0})` }}
+                  />
+                </>
+              )}
+
+              {/* Node */}
+              <span
+                aria-hidden="true"
+                className={`absolute left-0 top-0.5 flex h-5 w-5 items-center justify-center rounded-full border transition-colors duration-300 motion-reduce:transition-none ${
+                  done
+                    ? 'border-blue-400 bg-blue-500/20 text-blue-300'
+                    : 'border-white/20 bg-slate-900 text-transparent'
+                }`}
+              >
+                <CheckIcon size={11} />
+              </span>
+
+              <p className="text-[15px] font-medium leading-6 text-white">{entry.action}</p>
+              <p
+                className={`mt-1 flex flex-wrap gap-x-5 gap-y-0.5 font-mono text-[12px] transition-colors duration-300 motion-reduce:transition-none ${
+                  done ? 'text-slate-300' : 'text-slate-500'
+                }`}
+              >
+                <span>hash {entry.hash}</span>
+                <span>prev {entry.prev}</span>
+              </p>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* Footer: payoff once the chain is verified */}
+      <div className="flex items-center justify-between gap-4 border-t border-white/10 px-5 py-3.5 text-[12.5px]">
+        <span className="text-slate-400">Illustrative example</span>
+        <span
+          className={`flex items-center gap-1.5 font-medium text-emerald-400 transition-opacity duration-500 motion-reduce:transition-none ${
+            complete ? 'opacity-100' : 'opacity-0'
+          }`}
+          aria-hidden={!complete}
+        >
+          <CheckIcon size={13} />
+          Evidence package ready
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Section                                                                   */
+/* -------------------------------------------------------------------------- */
+
+const focusRing =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900';
+
 export function FinalCTASection() {
   return (
-    <section className="relative py-20 lg:py-24 bg-slate-900 overflow-hidden" aria-labelledby="final-cta-title">
+    <section
+      className="relative overflow-hidden bg-slate-900 py-20 lg:py-28"
+      aria-labelledby="final-cta-title"
+    >
       {/* Faint grid, echoes the hero's background language on a dark ground */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
           `,
           backgroundSize: '48px 48px',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 100%)',
+          maskImage: 'radial-gradient(ellipse 70% 70% at 70% 35%, black 20%, transparent 100%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse 70% 70% at 70% 35%, black 20%, transparent 100%)',
         }}
         aria-hidden="true"
       />
 
       <div className="site-container relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Icon */}
-          <motion.div
-            className="flex justify-center mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="w-14 h-14 rounded-2xl bg-blue-600/20 border border-blue-600/30 flex items-center justify-center">
-              <motion.svg
-                width="28"
-                height="28"
-                viewBox="0 0 28 28"
-                fill="none"
-                aria-hidden="true"
-                animate={{ opacity: [1, 0.75, 1] }}
-                transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <path
-                  d="M14 2L3 6V14c0 6.5 4.5 12 11 13.5C20.5 26 25 20.5 25 14V6L14 2z"
-                  stroke="#60a5fa"
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                  fill="none"
-                />
-                <path
-                  d="M9.5 14l3 3L18.5 11"
-                  stroke="#60a5fa"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </motion.svg>
-            </div>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h2
-            id="final-cta-title"
-            className="text-[2.25rem] sm:text-[2.75rem] lg:text-[3.25rem] font-bold text-white tracking-tight mb-4 text-balance"
-            style={{ fontFamily: 'var(--font-display)' }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-          >
-            The next audit shouldn&apos;t become an emergency.
-          </motion.h2>
-
-          <motion.p
-            className="text-center text-[1.15rem] sm:text-[1.25rem] text-slate-400 leading-relaxed mb-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            Know exactly what evidence you have before regulators ask.
-            <br className="hidden sm:block" />
-            Start for free with 5,000 monthly decision traces, or book an enterprise consultation.
-          </motion.p>
-
-          {/* Dual CTAs */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center mb-10"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-          >
-            <Link
-              href="/get-started"
-              className="group inline-flex items-center justify-center gap-2 px-7 py-4 bg-blue-600 hover:bg-blue-500 text-white text-[15px] font-semibold rounded-xl transition-all shadow-[0_0_0_1px_rgba(96,165,250,0.3),0_4px_16px_rgba(37,99,235,0.4)] hover:shadow-[0_0_0_1px_rgba(96,165,250,0.4),0_6px_24px_rgba(37,99,235,0.5)] hover:-translate-y-px"
+        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          {/* Copy + actions */}
+          <div>
+            <h2
+              id="final-cta-title"
+              className="max-w-xl text-balance text-[2.25rem] font-bold leading-[1.08] tracking-tight text-white sm:text-[2.75rem] lg:text-[3.25rem]"
+              style={{ fontFamily: 'var(--font-display)' }}
             >
-              Start for Free
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-                className="transition-transform duration-200 group-hover:translate-x-0.5"
-              >
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            <Link
-              href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-white/10 hover:bg-white/15 text-white text-[15px] font-semibold rounded-xl border border-white/15 hover:border-white/30 transition-all hover:-translate-y-px"
-            >
-              Book Compliance Call
-            </Link>
-          </motion.div>
+              The next audit shouldn&apos;t become an emergency.
+            </h2>
 
-          {/* Stat strip — concrete numbers instead of empty space */}
-          <motion.div
-            className="grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto mb-10 pb-10 border-b border-white/10"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            {statStrip.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.4, delay: 0.25 + i * 0.06 }}
-              >
-                <div
-                  className="text-[1.5rem] sm:text-[1.75rem] font-bold text-white tracking-tight"
-                  style={{ fontFamily: 'var(--font-display)' }}
+            <p className="mt-5 max-w-[34rem] text-[1.05rem] leading-relaxed text-slate-400 sm:text-[1.15rem]">
+              Know exactly what evidence you have before regulators ask. Start for free with 5,000
+              monthly decision traces, or book an enterprise consultation.
+            </p>
+
+            {/* Each action carries the promises that belong to it */}
+            <div className="mt-9 grid gap-x-5 gap-y-8 sm:grid-cols-2">
+              <div>
+                <Link
+                  href="/get-started"
+                  className={`inline-flex w-full items-center justify-center rounded-lg bg-blue-600 px-6 py-3.5 text-[15px] font-semibold text-white transition-colors hover:bg-blue-500 ${focusRing}`}
                 >
-                  {stat.value}
-                </div>
-                <div className="text-[11.5px] text-slate-500 leading-snug mt-1">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+                  Start for Free
+                </Link>
+                <PromiseList items={freePromises} />
+              </div>
 
-          {/* Reassurance strip */}
-          <motion.div
-            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-          >
-            {reassurancePoints.map((point, i) => (
-              <motion.div
-                key={point.text}
-                className="flex items-center gap-2"
-                initial={{ opacity: 0, y: 6 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.35 + i * 0.06 }}
+              <div>
+                <Link
+                  href="https://calendly.com/founder-blocklogsecurity/audit-readiness-call-20-min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex w-full items-center justify-center rounded-lg border border-white/20 px-6 py-3.5 text-[15px] font-semibold text-white transition-colors hover:border-white/40 hover:bg-white/5 ${focusRing}`}
+                >
+                  Book Compliance Call
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </Link>
+                <PromiseList items={enterprisePromises} />
+              </div>
+            </div>
+          </div>
+
+          {/* Product moment */}
+          <LedgerCard />
+        </div>
+
+        {/* Numbers */}
+        <div className="mt-16 grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-10 lg:mt-20">
+          {stats.map((stat) => (
+            <div key={stat.label} className="px-4 first:pl-0 sm:px-8">
+              <div
+                className="text-[1.6rem] font-bold tracking-tight text-white sm:text-[2rem]"
+                style={{ fontFamily: 'var(--font-display)' }}
               >
-                <div className="text-slate-500">{point.icon}</div>
-                <span className="text-[12.5px] text-slate-400">{point.text}</span>
-              </motion.div>
-            ))}
-          </motion.div>
+                {stat.value}
+              </div>
+              <div className="mt-1 max-w-[16rem] text-[12.5px] leading-snug text-slate-400 sm:text-sm">
+                {stat.label}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

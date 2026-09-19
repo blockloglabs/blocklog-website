@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
-import { Shield, ArrowRight, Check, Zap, Server, Lock } from 'lucide-react';
+import { ArrowRight, Check, Zap, Server, Lock } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Get Started — Blocklog AI Compliance Infrastructure',
@@ -24,7 +24,7 @@ export default function GetStartedPage() {
             >
               Get started with Blocklog.
             </h1>
-            <p className="text-[1.0625rem] text-slate-600 max-w-xl mx-auto">
+            <p className="section-subheading text-center">
               Choose how you want to deploy Blocklog. Start free on SaaS or set up an isolated VPC deployment for your enterprise.
             </p>
           </div>
@@ -131,9 +131,7 @@ export default function GetStartedPage() {
               </div>
 
               <Link
-                href="get-started/vpc"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/get-started/vpc"
                 className="w-full py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[14.5px] flex items-center justify-center gap-2 transition-all"
               >
                 Request VPC Deployment

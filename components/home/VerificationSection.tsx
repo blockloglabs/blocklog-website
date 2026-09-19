@@ -45,7 +45,7 @@ export function VerificationSection() {
               <br />
               <span className="text-blue-600">No trust required.</span>
             </h2>
-            <p className="text-[1rem] text-slate-600 leading-relaxed mb-6">
+            <p className="section-subheading mb-6">
               Every audit record Blocklog produces can be independently verified by any
               party — including regulators, auditors, or your own legal team — without
               accessing the Blocklog platform.

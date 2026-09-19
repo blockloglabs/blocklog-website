@@ -4,7 +4,7 @@ import { Footer } from '@/components/site/Footer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Blocklog',
-  description: 'Blocklog Security Technologies Pvt. Ltd. Privacy Policy.',
+  description: 'Blocklog Technologies Pvt. Ltd. Privacy Policy.',
 };
 
 export default function PrivacyPolicyPage() {
@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
               <section>
                 <h2 className="text-[1.1rem] font-bold text-slate-900 mb-2">1. Overview</h2>
                 <p>
-                  Blocklog Security Technologies Pvt. Ltd. (&quot;Blocklog&quot;, &quot;we&quot;, &quot;our&quot;) provides AI compliance infrastructure, cryptographic audit logs, and evidence packaging software. This Privacy Policy describes how we collect, use, and handle information when you use our website, services, and APIs under applicable Indian data privacy regulations, including the Digital Personal Data Protection (DPDP) Act 2023.
+                  Blocklog Technologies Pvt. Ltd. (&quot;Blocklog&quot;, &quot;we&quot;, &quot;our&quot;) provides AI compliance infrastructure, cryptographic audit logs, and evidence packaging software. This Privacy Policy describes how we collect, use, and handle information when you use our website, services, and APIs under applicable Indian data privacy regulations, including the Digital Personal Data Protection (DPDP) Act 2023.
                 </p>
               </section>
 

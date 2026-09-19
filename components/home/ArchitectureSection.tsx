@@ -106,7 +106,7 @@ export function ArchitectureSection() {
             <br />
             <span className="text-slate-500 font-normal">Trusted by compliance.</span>
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-2xl mx-auto">
+          <p className="section-subheading text-center">
             Simple to integrate. Impossible to tamper with. The architecture is transparent,
             open-source verifiable, and designed for regulated environments.
           </p>

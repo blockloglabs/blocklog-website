@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
-import { Shield, Building2, Lock, Award } from 'lucide-react';
+import { Shield, Building2, Lock } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About Us — Blocklog AI Compliance Infrastructure',
-  description: 'Blocklog Security Technologies Pvt. Ltd. is the pioneer in AI decision evidence infrastructure for regulated enterprises.',
+  description: 'Blocklog Technologies Pvt. Ltd. is the pioneer in AI decision evidence infrastructure for regulated enterprises.',
 };
 
 export default function AboutPage() {
@@ -24,7 +24,7 @@ export default function AboutPage() {
               <br />
               <span className="text-blue-600">Blocklog makes them proof.</span>
             </h1>
-            <p className="text-[1.0625rem] text-slate-600 max-w-2xl mx-auto">
+            <p className="section-subheading text-center">
               Blocklog was founded with a singular purpose: to give regulated enterprises complete cryptographic confidence when operating AI decision systems.
             </p>
           </div>

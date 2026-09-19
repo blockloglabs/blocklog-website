@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { CodeTerminal } from "@/components/ui/CodeTerminal";
+import { ArrowRight, CheckCircle2, Terminal } from "lucide-react";
 
 const installCommand = `pip install blocklog`;
 const credentialCommand = `export BLOCKLOG_API_KEY="blk_live_xxxxxxxxx"`;
@@ -35,81 +37,89 @@ def run_agent():
 if __name__ == "__main__":
     run_agent()`;
 
-function CodeBlock({ code }: { code: string }) {
-  return (
-    <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/30 p-4 text-sm leading-6 text-zinc-200 sm:p-5">
-      <code>{code}</code>
-    </pre>
-  );
-}
-
-function StepCard({ step, title, description, children }: { step: string; title: string; description: string; children: React.ReactNode }) {
-  return (
-    <article className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">{step}</p>
-      <h2 className="text-base font-semibold tracking-tight text-white sm:text-lg">{title}</h2>
-      <p className="mt-2 text-sm leading-7 text-muted sm:text-[15px]">{description}</p>
-      <div className="mt-4">{children}</div>
-    </article>
-  );
-}
-
 export default function QuickstartDocsPage() {
   return (
-    <main
-      className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
-      style={{ position: "relative", zIndex: 1 }}
-    >
-      <div className="space-y-8">
-        <header className="max-w-3xl">
-          <p className="eyebrow">Quickstart</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            5 Minutes to First Log
-          </h1>
-          <p className="mt-4 text-base leading-8 text-muted">
-            Install the Python SDK, configure credentials, and send your first cryptographically anchored audit log.
+    <div className="max-w-4xl space-y-8">
+      <header>
+        <span className="eyebrow mb-2">Getting Started</span>
+        <h1
+          className="text-[2.25rem] font-bold text-slate-900 tracking-tight mb-3"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Quickstart — 5 Minutes to First Log
+        </h1>
+        <p className="section-subheading max-w-2xl">
+          Install the Python SDK, configure your credentials, and anchor your first cryptographically verified AI decision trail.
+        </p>
+      </header>
+
+      <section className="grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3" style={{ fontFamily: 'var(--font-mono)' }}>
+              Step 01
+            </span>
+            <h2 className="text-[1.1rem] font-bold text-slate-900 mb-2">Install the SDK</h2>
+            <p className="text-[13.5px] text-slate-600 mb-4">
+              Install the official Blocklog Python SDK via pip.
+            </p>
+          </div>
+          <CodeTerminal title="terminal" language="bash" code={installCommand} />
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3" style={{ fontFamily: 'var(--font-mono)' }}>
+              Step 02
+            </span>
+            <h2 className="text-[1.1rem] font-bold text-slate-900 mb-2">Configure Credentials</h2>
+            <p className="text-[13.5px] text-slate-600 mb-4">
+              Set your Blocklog API key as an environment variable.
+            </p>
+          </div>
+          <CodeTerminal title="env" language="bash" code={credentialCommand} />
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-4">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full inline-block mb-3" style={{ fontFamily: 'var(--font-mono)' }}>
+            Step 03
+          </span>
+          <h2 className="text-[1.2rem] font-bold text-slate-900 mb-2">Ingest and verify your first log</h2>
+          <p className="text-[13.5px] text-slate-600 leading-relaxed">
+            Create an <code className="bg-slate-100 px-1.5 py-0.5 rounded text-blue-700 font-mono text-[13px]">ingest.py</code> script to trace an agent execution, record a decision, and verify its integrity against the ledger.
           </p>
-        </header>
+        </div>
+        <CodeTerminal title="ingest.py" language="python" code={quickstartCode} />
+      </section>
 
-        <section className="grid gap-5 md:grid-cols-2">
-          <StepCard step="Step 1" title="Install the SDK" description="Install the official Python SDK using pip.">
-            <CodeBlock code={installCommand} />
-          </StepCard>
-          <StepCard step="Step 2" title="Configure credentials" description="Set your Blocklog API key as an environment variable. The SDK will automatically detect it.">
-            <CodeBlock code={credentialCommand} />
-          </StepCard>
-        </section>
+      <section className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-6">
+        <div className="flex items-center gap-2 mb-2">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+          <h3 className="text-[15px] font-bold text-emerald-900">Execution Summary</h3>
+        </div>
+        <p className="text-[13.5px] text-emerald-800 leading-relaxed">
+          The SDK manages the trace session, registers a <code className="bg-emerald-100 px-1.5 py-0.5 rounded text-emerald-900 font-mono text-[12.5px]">TOOL_CALL</code> event, submits the SHA-256 hashed decision payload, and verifies the integrity chain via the Blocklog backend.
+        </p>
+      </section>
 
-        <StepCard step="Step 3" title="Ingest and verify your first log" description="Create ingest.py to trace an agent run, record a decision, and verify its integrity against the ledger.">
-          <CodeBlock code={quickstartCode} />
-        </StepCard>
-
-        <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
-            Execution Summary
-          </p>
-          <p className="text-sm leading-7 text-muted sm:text-[15px]">
-            The SDK manages the trace session, registers a{" "}
-            <code className="rounded bg-white/5 px-1.5 py-0.5 text-zinc-200">TOOL_CALL</code>{" "}
-            event, submits the signed decision payload, and verifies the integrity chain via the REST backend.
-          </p>
-        </section>
-
-        <nav className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row">
-          <Link
-            className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
-            href="/docs/concepts"
-          >
-            Core Concepts
-          </Link>
-          <Link
-            className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]"
-            href="/docs/python-sdk"
-          >
-            Python SDK Reference
-          </Link>
-        </nav>
-      </div>
-    </main>
+      <nav className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-200">
+        <Link
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-[14px] font-semibold text-white shadow-sm transition-all hover:bg-blue-700"
+          href="/docs/concepts"
+        >
+          Explore Core Concepts
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+        <Link
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-[14px] font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+          href="/docs/python-sdk"
+        >
+          <Terminal className="w-4 h-4 text-blue-600" />
+          Python SDK Reference
+        </Link>
+      </nav>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { Footer } from '@/components/site/Footer';
 
 export const metadata: Metadata = {
   title: 'Terms of Service — Blocklog',
-  description: 'Blocklog Security Technologies Pvt. Ltd. Terms of Service.',
+  description: 'Blocklog Technologies Pvt. Ltd. Terms of Service.',
 };
 
 export default function TermsOfServicePage() {

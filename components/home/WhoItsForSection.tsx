@@ -78,7 +78,7 @@ export function WhoItsForSection() {
           >
             Who is Blocklog for?
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-xl mx-auto">
+          <p className="section-subheading text-center">
             If your organisation uses AI to make decisions that affect people, 
             you have a regulatory obligation to prove how those decisions were made.
           </p>

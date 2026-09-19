@@ -134,7 +134,7 @@ export function FAQSection() {
           >
             Questions compliance leaders ask.
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-xl mx-auto">
+          <p className="section-subheading text-center">
             Before committing to a compliance infrastructure vendor, you should understand
             exactly how it works. We welcome scrutiny.
           </p>

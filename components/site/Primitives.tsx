@@ -17,7 +17,7 @@ import { buildDashboardUrl } from "@/lib/platform";
 // ─── Motion Presets ────────────────────────────────────────────────────────
 const EASE_INST = [0.16, 1, 0.3, 1] as const; 
 
-const PAGE_TRANSITION = {
+export const PAGE_TRANSITION = {
   initial: { opacity: 0, y: 10 },
   animate: {
     opacity: 1,

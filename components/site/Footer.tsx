@@ -7,32 +7,33 @@ const footerSections = [
   {
     title: 'Product',
     links: [
-      { label: 'Evidence Packages', href: '#evidence' },
-      { label: 'Hash Verification', href: '#verification' },
-      { label: 'Audit Timelines', href: '#architecture' },
+      { label: 'Evidence Packages', href: '/#evidence' },
+      { label: 'Hash Verification', href: '/#verification' },
+      { label: 'Architecture & Timeline', href: '/timeline' },
       { label: 'Pricing', href: '/pricing' },
-      { label: 'Pilot', href: '/pilot' },
+      { label: 'Pilot Program', href: '/pilot' },
     ],
   },
   {
     title: 'Resources',
     links: [
       { label: 'Documentation', href: '/docs' },
-      { label: 'API Reference', href: '/docs/api' },
-      { label: 'SDKs', href: '/docs/sdks' },
-      { label: 'Security Whitepaper', href: '/docs/security' },
-      { label: 'Compliance Guide', href: '/docs/compliance' },
+      { label: 'Quickstart', href: '/docs/quickstart' },
+      { label: 'Python SDK', href: '/docs/python-sdk' },
+      { label: 'TypeScript SDK', href: '/docs/ts-sdk' },
+      { label: 'REST API', href: '/docs/api-reference' },
+      { label: 'VPC Deployment', href: '/docs/vpc-deployment' },
       { label: 'GitHub', href: 'https://github.com/blockloglabs', external: true },
     ],
   },
   {
     title: 'Regulations',
     links: [
-      { label: 'DPDP Act 2023', href: '/docs/compliance/dpdp' },
-      { label: 'RBI AI Guidelines', href: '/docs/compliance/rbi' },
-      { label: 'SEBI Regulation 16C', href: '/docs/compliance/sebi' },
-      { label: 'ISO 42001', href: '/docs/compliance/iso42001' },
-      { label: 'SOC 2', href: '/docs/compliance/soc2' },
+      { label: 'DPDP Act 2023', href: '/#regulations' },
+      { label: 'RBI AI Guidelines', href: '/#regulations' },
+      { label: 'SEBI Regulation 16C', href: '/#regulations' },
+      { label: 'ISO 42001', href: '/#regulations' },
+      { label: 'SOC 2 Type II', href: '/#regulations' },
     ],
   },
   {
@@ -40,9 +41,10 @@ const footerSections = [
     links: [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
+      { label: 'Security & Posture', href: '/security' },
+      { label: 'System Status', href: '/status' },
       { label: 'Privacy Policy', href: '/privacy_policy' },
       { label: 'Terms of Service', href: '/terms_of_service' },
-      { label: 'Security', href: '/security' },
     ],
   },
 ];
@@ -145,7 +147,7 @@ export function Footer() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <p className="text-[12.5px] text-slate-400">
-            © {new Date().getFullYear()} Blocklog Security Technologies Pvt. Ltd. All rights reserved.
+            © {new Date().getFullYear()} Blocklog Technologies Pvt. Ltd. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <span className="text-[12px] text-slate-400">

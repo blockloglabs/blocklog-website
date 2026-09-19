@@ -56,7 +56,7 @@ export function EvidenceSection() {
             <br />
             <span className="text-blue-600">respond with evidence.</span>
           </h2>
-          <p className="text-center text-[1rem] text-slate-600 max-w-2xl mx-auto">
+          <p className="section-subheading text-center">
             Every audit event automatically contributes to a structured evidence package.
             No manual assembly. No missing documentation.
           </p>

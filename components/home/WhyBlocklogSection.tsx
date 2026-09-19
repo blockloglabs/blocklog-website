@@ -84,7 +84,7 @@ export function WhyBlocklogSection() {
           >
             Blocklog is not a logging tool.
           </h2>
-          <p className="text-center text-[1rem] text-slate-500 max-w-2xl mx-auto">
+          <p className="section-subheading text-center">
             Existing tools capture events. Blocklog creates evidence.
             These are fundamentally different things when a regulator is asking questions.
           </p>

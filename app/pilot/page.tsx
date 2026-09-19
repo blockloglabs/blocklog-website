@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Navbar } from '@/components/site/Navbar';
 import { Footer } from '@/components/site/Footer';
 import { LiveHashChainVisual } from '@/components/visuals/LiveHashChainVisual';
-import { Shield, Check, ArrowRight, Calendar, AlertTriangle, FileText, Lock, Users, Sparkles } from 'lucide-react';
+import { Check, ArrowRight, AlertTriangle, Sparkles } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '30-Day Compliance Pilot — Blocklog',
@@ -94,7 +94,7 @@ export default function PilotPage() {
               <span className="text-blue-600">Before your next audit.</span>
             </h1>
 
-            <p className="text-[1.0625rem] text-slate-600 leading-relaxed mb-8 text-pretty">
+            <p className="section-subheading text-center mb-8">
               The 30-Day Compliance Pilot produces the exact deliverable that satisfies CISOs and regulators — a cryptographically verified Audit Evidence Package from your actual production decisions.
             </p>
 
@@ -134,7 +134,7 @@ export default function PilotPage() {
               >
                 How the 30-day pilot works
               </h2>
-              <p className="text-[1rem] text-slate-500 max-w-xl mx-auto">
+              <p className="section-subheading text-center">
                 From initial integration to delivering an executive evidence package to your compliance team.
               </p>
             </div>
@@ -177,11 +177,14 @@ export default function PilotPage() {
             <div className="text-center mb-14">
               <span className="eyebrow mb-3">Eligibility</span>
               <h2
-                className="text-[2rem] sm:text-[2.5rem] font-bold text-slate-900 tracking-tight"
+                className="text-[2rem] sm:text-[2.5rem] font-bold text-slate-900 tracking-tight mb-4"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 Is your team ready for the pilot?
               </h2>
+              <p className="section-subheading text-center">
+                Review technical prerequisites to ensure your team is positioned for a seamless 30-day pilot deployment.
+              </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
